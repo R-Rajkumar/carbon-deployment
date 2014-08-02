@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.protobuf.registry.utils;
+package org.wso2.carbon.protobuf.registry.internal;
 
 import java.io.File;
 import java.io.IOException;
