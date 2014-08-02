@@ -36,6 +36,7 @@
 						<Private-Package>org.wso2.carbon.protobuf.registry.internal</Private-Package>
 						<Export-Package>
 							!org.wso2.carbon.protobuf.registry.internal,
+							!org.wso2.carbon.protobuf.registry.config,
 							org.wso2.carbon.protobuf.registry.*;version="1.0.0"
 						</Export-Package>
 						<Import-Package>
