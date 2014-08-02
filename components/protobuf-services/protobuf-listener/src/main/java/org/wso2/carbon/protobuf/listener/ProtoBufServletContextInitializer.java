@@ -24,7 +24,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.protobuf.annotation.ProtoBufService;
-import org.wso2.carbon.protobuf.listener.servlet.ProtoBufServlet;
+import org.wso2.carbon.protobuf.listener.internal.PBService;
+import org.wso2.carbon.protobuf.listener.internal.ProtobufServletContextListener;
+import org.wso2.carbon.protobuf.listener.internal.servlet.ProtoBufServlet;
 import org.wso2.carbon.protobuf.registry.BinaryServiceRegistry;
 
 import javax.servlet.ServletContainerInitializer;
@@ -40,10 +42,9 @@ import java.util.Set;
 
 /*
  * This class registers PB services into Binary Services Registry.
- * It will listen for an annotation (@Protobuf) and register services when
- * corresponding wars are deployed
+ * It will listen for an annotation (@ProtoBufService) and register services when
+ * corresponding wars are deployed.
  */
-
 @HandlesTypes({ ProtoBufService.class })
 public class ProtoBufServletContextInitializer implements ServletContainerInitializer {
 
@@ -55,80 +56,58 @@ public class ProtoBufServletContextInitializer implements ServletContainerInitia
 		if (classes == null || classes.size() == 0) {
 			return;
 		}
-
 		// adding a listener to remove services when wars are undeployed
 		servletContext.addListener(new ProtobufServletContextListener());
-
 		// keeps track of PB services in a PB war
 		// Please note that, a PB war can contain many PB services
 		List<PBService> serviceList = new ArrayList<PBService>();
-
 		// servlet to display proto files (like WSDL files)
 		ServletRegistration.Dynamic dynamic = servletContext.addServlet("ProtoBufServlet", ProtoBufServlet.class);
 
 		for (Class<?> clazz : classes) {
-
 			// Getting binary service registry
 			BinaryServiceRegistry binaryServiceRegistry = (BinaryServiceRegistry) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(BinaryServiceRegistry.class);
-
 			// Is it a blocking service or not
 			boolean blocking = clazz.getAnnotation(ProtoBufService.class).blocking();
-
 			Method myMethod = null;
 			Object obj = null;
 
 			try {
-
 				if (blocking) {
-
 					// getting newReflectiveBlocking method which will return a
 					// blocking service
 					myMethod = clazz.getInterfaces()[0].getDeclaringClass().getMethod("newReflectiveBlockingService", clazz.getInterfaces()[0]);
-
 					// Since it is a static method, we pass null
 					obj = myMethod.invoke(null, clazz.newInstance());
-
 					BlockingService blockingService = (BlockingService) obj;
-
 					// register service into Binary Service Registry
 					String serviceName = binaryServiceRegistry.registerBlockingService(blockingService);
 					String serviceType = "BlockingService";
-
 					// keeps PB service information in a bean
 					// we need these when removing the services from Binary
 					// Service Registry
 					// we are using these beans instances inside our destroyer
 					serviceList.add(new PBService(serviceName, serviceType));
 					servletContext.setAttribute("services", serviceList);
-
 					dynamic.addMapping("/");
-
 				} else {
-
 					// getting newReflectiveService which will return a non
 					// blocking service
 					myMethod = clazz.getInterfaces()[0].getDeclaringClass().getMethod("newReflectiveService", clazz.getInterfaces()[0]);
-
 					// Since it is a static method, we pass null
 					obj = myMethod.invoke(null, clazz.newInstance());
-
 					Service service = (Service) obj;
-
 					// register service into Binary Service Registry
 					String serviceName = binaryServiceRegistry.registerService(service);
 					String serviceType = "NonBlockingService";
-
 					// keeps PB service information in a bean
 					// we need these information to remove the service from
 					// Binary Service Registry later
 					// we are using these bean instances in our destroyer
 					serviceList.add(new PBService(serviceName, serviceType));
 					servletContext.setAttribute("services", serviceList);
-
 					dynamic.addMapping("/");
-
 				}
-
 			} catch (InvocationTargetException e) {
 				String msg = "InvocationTargetException" + e.getLocalizedMessage();
 				log.info(msg);
@@ -142,7 +121,6 @@ public class ProtoBufServletContextInitializer implements ServletContainerInitia
 				String msg = "IllegalAccessException" + e.getLocalizedMessage();
 				log.info(msg);
 			}
-
 		}
 	}
 }
