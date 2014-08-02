@@ -25,7 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.protobuf.annotation.ProtoBufService;
-import org.wso2.carbon.protobuf.listener.internal.PBService;
+import org.wso2.carbon.protobuf.listener.internal.ProtobufServiceData;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServletContextListener;
 import org.wso2.carbon.protobuf.listener.internal.servlet.ProtobufServlet;
 import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
@@ -62,7 +62,7 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
         servletContext.addListener(new ProtobufServletContextListener());
         // keeps track of PB services in a PB war
         // Please note that, a PB war can contain many PB services
-        List<PBService> serviceList = new ArrayList<PBService>();
+        List<ProtobufServiceData> serviceList = new ArrayList<ProtobufServiceData>();
         // servlet to display proto files (like WSDL files)
         ServletRegistration.Dynamic dynamic = servletContext.addServlet("ProtoBufServlet", ProtobufServlet.class);
 
@@ -90,7 +90,7 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
                     // we need these when removing the services from Binary
                     // Service Registry
                     // we are using these beans instances inside our destroyer
-                    serviceList.add(new PBService(serviceName, serviceType));
+                    serviceList.add(new ProtobufServiceData(serviceName, serviceType));
                     servletContext.setAttribute("services", serviceList);
                     dynamic.addMapping("/");
                 } else {
@@ -107,7 +107,7 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
                     // we need these information to remove the service from
                     // Binary Service Registry later
                     // we are using these bean instances in our destroyer
-                    serviceList.add(new PBService(serviceName, serviceType));
+                    serviceList.add(new ProtobufServiceData(serviceName, serviceType));
                     servletContext.setAttribute("services", serviceList);
                     dynamic.addMapping("/");
                 }

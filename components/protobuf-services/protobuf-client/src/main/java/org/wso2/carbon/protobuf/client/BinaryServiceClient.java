@@ -29,12 +29,10 @@ import com.google.protobuf.RpcController;
  * Server.
  */
 public class BinaryServiceClient {
-
 	private RpcChannel channel;
 	private RpcController controller;
 
 	protected BinaryServiceClient(RpcChannel channel, RpcController controller) {
-
 		this.channel = channel;
 		this.controller = controller;
 	}

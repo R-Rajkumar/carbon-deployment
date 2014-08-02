@@ -26,12 +26,11 @@ package org.wso2.carbon.protobuf.listener.internal;
  * serviceName - Name of the service implementation (not service definition)
  * serviceType - whether it is a blocking service or non blocking service
  */
-public class PBService {
+public class ProtobufServiceData {
 	private String serviceName;
 	private String serviceType;
 
-	public PBService(String serviceName, String serviceType) {
-
+	public ProtobufServiceData(String serviceName, String serviceType) {
 		this.serviceName = serviceName;
 		this.serviceType = serviceType;
 	}

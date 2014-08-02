@@ -45,11 +45,11 @@ public class ProtobufServletContextListener implements ServletContextListener {
         // getting all the services for the corresponding servlet context
         // Please note that, a PB war can contain many PB services
         // Therefore we should remove all of them when the war is undeployed
-        ArrayList<PBService> serviceList = (ArrayList<PBService>) servletContext.getAttribute("services");
+        ArrayList<ProtobufServiceData> serviceList = (ArrayList<ProtobufServiceData>) servletContext.getAttribute("services");
 
         for (Iterator iterator = serviceList.iterator(); iterator.hasNext(); ) {
             // getting service information from PBService bean
-            PBService pbService = (PBService) iterator.next();
+            ProtobufServiceData pbService = (ProtobufServiceData) iterator.next();
             String serviceName = pbService.getServiceName();
             String serviceType = pbService.getServiceType();
             // if PB service is a blocking service
