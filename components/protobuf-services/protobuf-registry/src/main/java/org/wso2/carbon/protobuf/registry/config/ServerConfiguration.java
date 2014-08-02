@@ -86,6 +86,4 @@ public class ServerConfiguration {
 	public void setLoggerConfiguration(LoggerConfiguration loggerConfiguration) {
 		this.loggerConfiguration = loggerConfiguration;
 	}
-
-    
 }

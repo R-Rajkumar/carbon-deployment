@@ -42,8 +42,4 @@ public class TransportConfiguration {
 	public void setTCPNoDelay(boolean isTCPNoDelay) {
 		this.isTCPNoDelay = isTCPNoDelay;
 	}
-
-	
-    
-    
 }

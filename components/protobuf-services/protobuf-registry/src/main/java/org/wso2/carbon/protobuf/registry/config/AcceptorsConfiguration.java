@@ -16,7 +16,6 @@ public class AcceptorsConfiguration {
     @XmlElement(name = "ReceiverBufferSize", required = true)
     private int receiverBufferSize;
 
-
 	public int getPoolSize() {
 		return poolSize;
 	}
@@ -40,6 +39,4 @@ public class AcceptorsConfiguration {
 	public void setReceiverBufferSize(int receiverBufferSize) {
 		this.receiverBufferSize = receiverBufferSize;
 	}
-    
-    
 }

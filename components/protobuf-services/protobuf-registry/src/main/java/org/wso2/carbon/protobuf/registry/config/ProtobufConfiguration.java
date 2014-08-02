@@ -42,6 +42,4 @@ public class ProtobufConfiguration {
 			TransportConfiguration transportConfiguration) {
 		this.transportConfiguration = transportConfiguration;
 	}
-
-    
 }

@@ -39,6 +39,4 @@ public class ServerCallExecutorThreadPoolConfiguration {
 	public void setMaxPoolTimeout(int maxPoolTimeout) {
 		this.maxPoolTimeout = maxPoolTimeout;
 	}
-    
-    
 }

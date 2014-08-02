@@ -40,6 +40,4 @@ public class TimeoutExecutorThreadPoolConfiguration {
 	public void setKeepAliveTime(int keepAliveTime) {
 		this.keepAliveTime = keepAliveTime;
 	}
-    
-    
 }

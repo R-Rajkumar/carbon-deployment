@@ -4,7 +4,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
-
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ChannelHandlersConfiguration {
 
@@ -40,6 +39,4 @@ public class ChannelHandlersConfiguration {
 	public void setReceiverBufferSize(int receiverBufferSize) {
 		this.receiverBufferSize = receiverBufferSize;
 	}
-    
-    
 }
