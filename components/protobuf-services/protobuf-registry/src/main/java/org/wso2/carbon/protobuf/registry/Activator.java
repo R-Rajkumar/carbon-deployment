@@ -59,7 +59,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 
 public class Activator implements BundleActivator {
 
-	private static Logger log = LoggerFactory.getLogger(BinaryServiceRegistry.class);
+	private static Logger log = LoggerFactory.getLogger(BinaryServiceRegistryImpl.class);
 
 	static DuplexTcpServerPipelineFactory serverFactory;
 
@@ -177,8 +177,8 @@ public class Activator implements BundleActivator {
 		log.info("Serving " + serverInfo);
 
 		// Register Binary Service Registry as an OSGi service
-		BinaryServiceRegistry binaryServiceRegistry = new BinaryServiceRegistry(serverFactory);
-		bundleContext.registerService(BinaryServiceRegistry.class.getName(), binaryServiceRegistry, null);
+		BinaryServiceRegistryImpl binaryServiceRegistry = new BinaryServiceRegistryImpl(serverFactory);
+		bundleContext.registerService(BinaryServiceRegistryImpl.class.getName(), binaryServiceRegistry, null);
 
 	}
 

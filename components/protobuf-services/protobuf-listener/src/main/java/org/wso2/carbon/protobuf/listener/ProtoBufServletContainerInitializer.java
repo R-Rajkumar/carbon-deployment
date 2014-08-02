@@ -27,7 +27,7 @@ import org.wso2.carbon.protobuf.annotation.ProtoBufService;
 import org.wso2.carbon.protobuf.listener.internal.PBService;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServletContextListener;
 import org.wso2.carbon.protobuf.listener.internal.servlet.ProtoBufServlet;
-import org.wso2.carbon.protobuf.registry.BinaryServiceRegistry;
+import org.wso2.carbon.protobuf.registry.BinaryServiceRegistryImpl;
 
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
@@ -66,7 +66,7 @@ public class ProtoBufServletContainerInitializer implements ServletContainerInit
 
         for (Class<?> clazz : classes) {
             // Getting binary service registry
-            BinaryServiceRegistry binaryServiceRegistry = (BinaryServiceRegistry) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(BinaryServiceRegistry.class);
+            BinaryServiceRegistryImpl binaryServiceRegistry = (BinaryServiceRegistryImpl) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(BinaryServiceRegistryImpl.class);
             // Is it a blocking service or not
             boolean blocking = clazz.getAnnotation(ProtoBufService.class).blocking();
             Method reflectiveMethod = null;

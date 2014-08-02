@@ -32,13 +32,13 @@ import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
  * Any class can get an instance of this class from OSGI run time and use it to
  * rgister/remove services
  */
-public class BinaryServiceRegistry {
+public class BinaryServiceRegistryImpl {
 
-	private static final Log log = LogFactory.getLog(BinaryServiceRegistry.class);
+	private static final Log log = LogFactory.getLog(BinaryServiceRegistryImpl.class);
 
 	private DuplexTcpServerPipelineFactory serverFactory;
 
-	BinaryServiceRegistry(DuplexTcpServerPipelineFactory serverFactory) {
+	BinaryServiceRegistryImpl(DuplexTcpServerPipelineFactory serverFactory) {
 
 		this.serverFactory = serverFactory;
 	}

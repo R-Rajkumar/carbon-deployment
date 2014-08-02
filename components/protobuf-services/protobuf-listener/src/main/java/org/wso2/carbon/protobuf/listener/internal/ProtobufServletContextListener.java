@@ -18,7 +18,7 @@
 package org.wso2.carbon.protobuf.listener.internal;
 
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.protobuf.registry.BinaryServiceRegistry;
+import org.wso2.carbon.protobuf.registry.BinaryServiceRegistryImpl;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -40,7 +40,7 @@ public class ProtobufServletContextListener implements ServletContextListener {
 
         ServletContext servletContext = servletContextEvent.getServletContext();
         // getting Binary Service Registry from OSGI run time
-        BinaryServiceRegistry binaryServiceRegistry = (BinaryServiceRegistry) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(BinaryServiceRegistry.class);
+        BinaryServiceRegistryImpl binaryServiceRegistry = (BinaryServiceRegistryImpl) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(BinaryServiceRegistryImpl.class);
         // getting all the services for the corresponding servlet context
         // Please note that, a PB war can contain many PB services
         // Therefore we should remove all of them when the war is undeployed

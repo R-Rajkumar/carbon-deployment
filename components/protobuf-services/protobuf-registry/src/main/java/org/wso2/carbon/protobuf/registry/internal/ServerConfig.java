@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.base.CarbonBaseConstants;
 import org.wso2.carbon.base.ServerConfiguration;
-import org.wso2.carbon.protobuf.registry.BinaryServiceRegistry;
+import org.wso2.carbon.protobuf.registry.BinaryServiceRegistryImpl;
 import org.xml.sax.SAXException;
 
 /*
@@ -48,7 +48,7 @@ import org.xml.sax.SAXException;
  */
 public class ServerConfig {
 
-	private static Logger log = LoggerFactory.getLogger(BinaryServiceRegistry.class);
+	private static Logger log = LoggerFactory.getLogger(BinaryServiceRegistryImpl.class);
 
 	private static String pbsxmlPath = System.getProperty(CarbonBaseConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+File.separator+"etc"+File.separator+"pbs.xml";
 
