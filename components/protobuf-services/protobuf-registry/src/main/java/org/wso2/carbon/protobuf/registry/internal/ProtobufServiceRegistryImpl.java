@@ -16,10 +16,11 @@
  * under the License.
  */
 
-package org.wso2.carbon.protobuf.registry;
+package org.wso2.carbon.protobuf.registry.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
 
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
@@ -32,13 +33,13 @@ import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
  * Any class can get an instance of this class from OSGI run time and use it to
  * rgister/remove services
  */
-public class BinaryServiceRegistryImpl {
+public class ProtobufServiceRegistryImpl implements ProtobufServiceRegistry{
 
-	private static final Log log = LogFactory.getLog(BinaryServiceRegistryImpl.class);
+	private static final Log log = LogFactory.getLog(ProtobufServiceRegistry.class);
 
 	private DuplexTcpServerPipelineFactory serverFactory;
 
-	BinaryServiceRegistryImpl(DuplexTcpServerPipelineFactory serverFactory) {
+	ProtobufServiceRegistryImpl(DuplexTcpServerPipelineFactory serverFactory) {
 
 		this.serverFactory = serverFactory;
 	}

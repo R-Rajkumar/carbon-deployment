@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Export-Package: org.wso2.carbon.protobuf.annotation;version="1.0.0"
+Bundle-Vendor: WSO2 Inc
+Built-By: rajkumar
+Build-Jdk: 1.7.0_65
+Bundle-Version: 1.0.0.SNAPSHOT
+Tool: Bnd-1.43.0
+Bundle-Name: protobuf-annotation
+Bnd-LastModified: 1406986966096
+Created-By: Apache Maven Bundle Plugin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.wso2.carbon.protobuf-annotation
+

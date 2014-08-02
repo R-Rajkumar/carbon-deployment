@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Export-Package: org.wso2.carbon.protobuf.registry;uses:="com.google.pr
+ otobuf";version="1.0.0"
+Built-By: rajkumar
+Tool: Bnd-1.43.0
+Bundle-Name: protobuf-registry
+Created-By: Apache Maven Bundle Plugin
+Bundle-Vendor: WSO2 Inc
+Build-Jdk: 1.7.0_65
+Bundle-Version: 1.0.0.SNAPSHOT
+Bnd-LastModified: 1406986967068
+Bundle-ManifestVersion: 2
+Bundle-Activator: org.wso2.carbon.protobuf.registry.internal.Activator
+Import-Package: com.google.protobuf;version="[2.5,3)",com.googlecode.p
+ rotobuf.pro.duplex;version="[3.2,4)",com.googlecode.protobuf.pro.dupl
+ ex.execute;version="[3.2,4)",com.googlecode.protobuf.pro.duplex.liste
+ ner;version="[3.2,4)",com.googlecode.protobuf.pro.duplex.logging;vers
+ ion="[3.2,4)",com.googlecode.protobuf.pro.duplex.server;version="[3.2
+ ,4)",com.googlecode.protobuf.pro.duplex.timeout;version="[3.2,4)",com
+ .googlecode.protobuf.pro.duplex.util;version="[3.2,4)",io.netty.boots
+ trap;version="[4.0,5)",io.netty.channel;version="[4.0,5)",io.netty.ch
+ annel.nio;version="[4.0,5)",io.netty.channel.socket.nio;version="[4.0
+ ,5)",io.netty.util.concurrent;version="[4.0,5)",javax.xml.parsers,jav
+ ax.xml.transform,javax.xml.transform.dom,javax.xml.transform.stream,j
+ avax.xml.validation,org.apache.commons.logging;version="[1.1,2)",org.
+ osgi.framework;version="[1.7,2)",org.slf4j;version="[1.7,2)",org.w3c.
+ dom,org.wso2.carbon.base;version="[1.0,2)",org.xml.sax
+Bundle-SymbolicName: org.wso2.carbon.protobuf-registry
+

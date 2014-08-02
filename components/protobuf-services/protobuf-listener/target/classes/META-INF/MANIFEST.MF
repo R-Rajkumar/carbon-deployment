@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Export-Package: org.wso2.carbon.protobuf.listener.internal.servlet;use
+ s:="javax.servlet,javax.servlet.http";version="1.0.0",org.wso2.carbon
+ .protobuf.listener;uses:="javax.servlet,org.apache.commons.logging,or
+ g.wso2.carbon.protobuf.listener.internal.servlet,org.wso2.carbon.prot
+ obuf.annotation,org.wso2.carbon.protobuf.registry,org.wso2.carbon.con
+ text,com.google.protobuf,javax.servlet.annotation,org.wso2.carbon.pro
+ tobuf.listener.internal";version="1.0.0",org.wso2.carbon.protobuf.lis
+ tener.internal;uses:="javax.servlet,org.wso2.carbon.protobuf.registry
+ ,org.wso2.carbon.context";version="1.0.0"
+Built-By: rajkumar
+Tool: Bnd-1.43.0
+Bundle-Name: protobuf-listener
+Created-By: Apache Maven Bundle Plugin
+Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.service
+ loader.registrar)"
+Bundle-Vendor: WSO2 Inc
+Provide-Capability: osgi.serviceloader;osgi.serviceloader=javax.servle
+ t.ServletContainerInitializer
+Build-Jdk: 1.7.0_65
+Bundle-Version: 1.0.0.SNAPSHOT
+Bnd-LastModified: 1406986967638
+Bundle-ManifestVersion: 2
+Import-Package: com.google.protobuf;version="[2.5,3)",javax.servlet;ve
+ rsion="[2.6.0,3.0.0)",javax.servlet.annotation;version="[2.6,3)",java
+ x.servlet.http;version="[2.6.0,3.0.0)",org.apache.commons.logging;ver
+ sion="[1.1,2)",org.wso2.carbon.context;version="[4.0,5)",org.wso2.car
+ bon.protobuf.annotation;version="[1.0.0,1.1.0)",org.wso2.carbon.proto
+ buf.registry;version="[1.0.0,1.1.0)"
+Bundle-SymbolicName: org.wso2.carbon.protobuf-listener
+

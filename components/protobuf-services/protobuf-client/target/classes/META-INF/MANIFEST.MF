@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1406986968534
+Build-Jdk: 1.7.0_65
+Built-By: rajkumar
+Bundle-Activator: org.wso2.carbon.protobuf.client.Activator
+Bundle-ManifestVersion: 2
+Bundle-Name: WSO2 Carbon - Protocol Buffer Service Client
+Bundle-SymbolicName: org.wso2.carbon.protobuf-client
+Bundle-Version: 0.0.1.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Export-Package: org.wso2.carbon.protobuf.client;uses:="com.googlecode.pr
+ otobuf.pro.duplex.listener,com.googlecode.protobuf.pro.duplex,org.osgi.
+ framework,org.slf4j,io.netty.channel,org.wso2.carbon.protobuf.client.ut
+ ils,com.googlecode.protobuf.pro.duplex.server,com.google.protobuf,io.ne
+ tty.channel.nio,com.googlecode.protobuf.pro.duplex.util,io.netty.util.c
+ oncurrent,com.googlecode.protobuf.pro.duplex.timeout,io.netty.channel.s
+ ocket.nio,com.googlecode.protobuf.pro.duplex.client,io.netty.bootstrap"
+ ;version="0.0.1.SNAPSHOT",org.wso2.carbon.protobuf.client.utils;uses:="
+ org.wso2.carbon.protobuf.client,javax.xml.parsers,org.w3c.dom,org.slf4j
+ ,org.wso2.carbon.base,org.xml.sax";version="0.0.1.SNAPSHOT"
+Import-Package: com.google.protobuf;version="[2.5,3)",com.googlecode.pro
+ tobuf.pro.duplex;version="[3.2,4)",com.googlecode.protobuf.pro.duplex.c
+ lient;version="[3.2,4)",com.googlecode.protobuf.pro.duplex.listener;ver
+ sion="[3.2,4)",com.googlecode.protobuf.pro.duplex.server;version="[3.2,
+ 4)",com.googlecode.protobuf.pro.duplex.timeout;version="[3.2,4)",com.go
+ oglecode.protobuf.pro.duplex.util;version="[3.2,4)",io.netty.bootstrap;
+ version="[4.0,5)",io.netty.channel;version="[4.0,5)",io.netty.channel.n
+ io;version="[4.0,5)",io.netty.channel.socket.nio;version="[4.0,5)",io.n
+ etty.util.concurrent;version="[4.0,5)",javax.xml.parsers,org.osgi.frame
+ work;version="[1.6,2)",org.slf4j;version="[1.7,2)",org.w3c.dom,org.wso2
+ .carbon.base;version="[1.0,2)",org.xml.sax
+Tool: Bnd-1.50.0

@@ -20,20 +20,22 @@ package org.wso2.carbon.protobuf.listener;
 
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.protobuf.annotation.ProtoBufService;
 import org.wso2.carbon.protobuf.listener.internal.PBService;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServletContextListener;
-import org.wso2.carbon.protobuf.listener.internal.servlet.ProtoBufServlet;
-import org.wso2.carbon.protobuf.registry.BinaryServiceRegistryImpl;
+import org.wso2.carbon.protobuf.listener.internal.servlet.ProtobufServlet;
+import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
 
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.annotation.HandlesTypes;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -46,9 +48,9 @@ import java.util.Set;
  * corresponding wars are deployed.
  */
 @HandlesTypes({ProtoBufService.class})
-public class ProtoBufServletContainerInitializer implements ServletContainerInitializer {
+public class ProtobufServletContainerInitializer implements ServletContainerInitializer {
 
-    private static final Log log = LogFactory.getLog(ProtoBufServletContainerInitializer.class);
+    private static final Log log = LogFactory.getLog(ProtobufServletContainerInitializer.class);
 
     @Override
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
@@ -62,15 +64,15 @@ public class ProtoBufServletContainerInitializer implements ServletContainerInit
         // Please note that, a PB war can contain many PB services
         List<PBService> serviceList = new ArrayList<PBService>();
         // servlet to display proto files (like WSDL files)
-        ServletRegistration.Dynamic dynamic = servletContext.addServlet("ProtoBufServlet", ProtoBufServlet.class);
+        ServletRegistration.Dynamic dynamic = servletContext.addServlet("ProtoBufServlet", ProtobufServlet.class);
 
         for (Class<?> clazz : classes) {
             // Getting binary service registry
-            BinaryServiceRegistryImpl binaryServiceRegistry = (BinaryServiceRegistryImpl) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(BinaryServiceRegistryImpl.class);
+            ProtobufServiceRegistry binaryServiceRegistry = (ProtobufServiceRegistry) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(ProtobufServiceRegistry.class);
             // Is it a blocking service or not
             boolean blocking = clazz.getAnnotation(ProtoBufService.class).blocking();
             Method reflectiveMethod = null;
-            Object obj = null;
+            Object serviceObj = null;
             String serviceName;
             String serviceType;
             try {
@@ -79,8 +81,8 @@ public class ProtoBufServletContainerInitializer implements ServletContainerInit
                     // blocking service
                     reflectiveMethod = clazz.getInterfaces()[0].getDeclaringClass().getMethod("newReflectiveBlockingService", clazz.getInterfaces()[0]);
                     // Since it is a static method, we pass null
-                    obj = reflectiveMethod.invoke(null, clazz.newInstance());
-                    BlockingService blockingService = (BlockingService) obj;
+                    serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
+                    BlockingService blockingService = (BlockingService) serviceObj;
                     // register service into Binary Service Registry
                     serviceName = binaryServiceRegistry.registerBlockingService(blockingService);
                     serviceType = "BlockingService";
@@ -96,8 +98,8 @@ public class ProtoBufServletContainerInitializer implements ServletContainerInit
                     // blocking service
                     reflectiveMethod = clazz.getInterfaces()[0].getDeclaringClass().getMethod("newReflectiveService", clazz.getInterfaces()[0]);
                     // Since it is a static method, we pass null
-                    obj = reflectiveMethod.invoke(null, clazz.newInstance());
-                    Service service = (Service) obj;
+                    serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
+                    Service service = (Service) serviceObj;
                     // register service into Binary Service Registry
                     serviceName = binaryServiceRegistry.registerService(service);
                     serviceType = "NonBlockingService";

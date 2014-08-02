@@ -81,7 +81,7 @@
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.protobuf.annotation.*;version="[1.0.0,1.1.0)",
-                            org.wso2.carbon.protobuf.registry.*;version="[1.0.0,1.1.0)",
+                            org.wso2.carbon.protobuf.registry;version="[1.0.0,1.1.0)",
                             com.google.protobuf;version="[2.5,3)",
                             org.apache.commons.logging;version="[1.1,2)",
                             javax.servlet;version="${imp.pkg.version.javax.servlet}",

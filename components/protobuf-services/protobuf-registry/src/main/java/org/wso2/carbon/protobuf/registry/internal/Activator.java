@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.carbon.protobuf.registry;
+package org.wso2.carbon.protobuf.registry.internal;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -31,7 +31,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wso2.carbon.protobuf.registry.internal.ServerConfig;
+import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
 
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
@@ -59,7 +59,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 
 public class Activator implements BundleActivator {
 
-	private static Logger log = LoggerFactory.getLogger(BinaryServiceRegistryImpl.class);
+	private static Logger log = LoggerFactory.getLogger(ProtobufServiceRegistry.class);
 
 	static DuplexTcpServerPipelineFactory serverFactory;
 
@@ -177,8 +177,8 @@ public class Activator implements BundleActivator {
 		log.info("Serving " + serverInfo);
 
 		// Register Binary Service Registry as an OSGi service
-		BinaryServiceRegistryImpl binaryServiceRegistry = new BinaryServiceRegistryImpl(serverFactory);
-		bundleContext.registerService(BinaryServiceRegistryImpl.class.getName(), binaryServiceRegistry, null);
+		ProtobufServiceRegistry protobufServiceRegistry = new ProtobufServiceRegistryImpl(serverFactory);
+		bundleContext.registerService(ProtobufServiceRegistry.class.getName(), protobufServiceRegistry, null);
 
 	}
 
