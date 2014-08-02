@@ -24,15 +24,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /*
- * Annotations for Protocol Buffer Services
- * name - Service Name
+ * Annotation for Protocol Buffer Services
  * blocking - whether it is a blocking or a non blocking service
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)//class level
 public @interface ProtoBufService {
-    //ignore the service or not
+    //blocking or non-blocking
     public boolean blocking() default true;
-    public String name();
 }

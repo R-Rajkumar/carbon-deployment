@@ -24,16 +24,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-	<modelVersion>4.0.0</modelVersion>
+
 
 	<parent>
 		<groupId>org.wso2.carbon</groupId>
 		<artifactId>protobuf-service</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<modelVersion>4.0.0</modelVersion>
 	<artifactId>protobuf-annotation</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>WSO2 Carbon - Protocol Buffer Service Annotation</name>
 	<url>http://wso2.org</url>
@@ -43,15 +44,14 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.3.7</version>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${pom.groupId}.${pom.artifactId}</Bundle-SymbolicName>
-						<Bundle-Name>${pom.name}</Bundle-Name>
-						<Bundle-Version>${pom.version}</Bundle-Version>
+						<Bundle-Vendor>WSO2 Inc</Bundle-Vendor>
+						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Export-Package>
-							org.wso2.carbon.protobuf.annotation.*
+							org.wso2.carbon.protobuf.annotation.*; version="1.0.0"
 						</Export-Package>
 					</instructions>
 				</configuration>
