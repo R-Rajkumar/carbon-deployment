@@ -32,7 +32,7 @@
 						<Bundle-Vendor>WSO2 Inc</Bundle-Vendor>
 						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
-						<Bundle-Activator>org.wso2.carbon.protobuf.registry.internal.Activator</Bundle-Activator>
+						<Bundle-Activator>org.wso2.carbon.protobuf.registry.internal.ProtobufServiceRegistryActivator</Bundle-Activator>
 						<Private-Package>org.wso2.carbon.protobuf.registry.internal</Private-Package>
 						<Export-Package>
 							!org.wso2.carbon.protobuf.registry.internal,
@@ -58,12 +58,11 @@
 							javax.xml.transform.dom,
 							javax.xml.transform.stream,
 							javax.xml.validation,
-							org.apache.commons.logging;version="[1.1,2)",
 							org.osgi.framework;version="[1.7,2)",
 							org.slf4j;version="[1.7,2)",
 							org.w3c.dom,
 							org.wso2.carbon.base;version="[1.0,2)",
-							org.xml.sax
+							org.xml.sax	
 						</Import-Package>
 					</instructions>
 				</configuration>

@@ -57,7 +57,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * inside AS's components/repository/lib directory.
  */
 
-public class Activator implements BundleActivator {
+public class ProtobufServiceRegistryActivator implements BundleActivator {
 
 	private static Logger log = LoggerFactory.getLogger(ProtobufServiceRegistry.class);
 

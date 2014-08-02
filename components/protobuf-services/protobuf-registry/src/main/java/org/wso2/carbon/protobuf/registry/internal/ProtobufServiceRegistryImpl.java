@@ -18,10 +18,9 @@
 
 package org.wso2.carbon.protobuf.registry.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
@@ -35,7 +34,7 @@ import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
  */
 public class ProtobufServiceRegistryImpl implements ProtobufServiceRegistry{
 
-	private static final Log log = LogFactory.getLog(ProtobufServiceRegistry.class);
+	private static Logger log = LoggerFactory.getLogger(ProtobufServiceRegistry.class);
 
 	private DuplexTcpServerPipelineFactory serverFactory;
 
