@@ -31,7 +31,8 @@ import org.apache.synapse.mediators.AbstractMediator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.protobuf.client.BinaryServiceClient;
+import org.wso2.carbon.protobuf.client.ProtobufClient;
+import org.wso2.carbon.protobuf.client.internal.ProtobufClientImpl;
 
 import com.google.protobuf.BlockingRpcChannel;
 import com.google.protobuf.Message;
@@ -92,9 +93,9 @@ public class ProtoBufMediator extends AbstractMediator {
 
 		// get binary service client which provides TCP channel to connect with
 		// back end RPC server
-		BinaryServiceClient binaryServiceClient = null;
+		ProtobufClient protobufClient = null;
 		try {
-			binaryServiceClient = (BinaryServiceClient) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(BinaryServiceClient.class);
+			protobufClient = (ProtobufClient) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(ProtobufClient.class);
 		} catch (NullPointerException e) {
 			String msg = "Binary Service Client is not running. Make sure back end Binary Server is running and corresponding ports in your pbs xml";
 			log.debug(msg);
@@ -189,14 +190,14 @@ public class ProtoBufMediator extends AbstractMediator {
 			newBlockingStub.setAccessible(true);
 
 			// get a blocking service version of the service
-			Object blockingService = newBlockingStub.getReturnType().cast(newBlockingStub.invoke(null, binaryServiceClient.getRpcChannel()));
+			Object blockingService = newBlockingStub.getReturnType().cast(newBlockingStub.invoke(null, protobufClient.getRpcChannel()));
 
 			// invoke the required method on the service
 			Method method = blockingService.getClass().getDeclaredMethod(action, RpcController.class, messageClass);
 
 			method.setAccessible(true);
 
-			Object response = method.getReturnType().cast(method.invoke(blockingService, binaryServiceClient.getRpcController(), method.getParameterTypes()[1].cast(request)));
+			Object response = method.getReturnType().cast(method.invoke(blockingService, protobufClient.getRpcController(), method.getParameterTypes()[1].cast(request)));
 
 			// pb to xml
 			OMElement element = AXIOMUtil.stringToOM(XmlFormat.printToString((Message) response));

@@ -26,10 +26,8 @@ public class ProtobufConfigFactory {
             // validate pbs.xml using the schema
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             StreamSource streamSource = new StreamSource();
-            streamSource.setInputStream(Thread.currentThread().getContextClassLoader().
-                    getResourceAsStream("pbs.xsd"));
+            streamSource.setInputStream(Thread.currentThread().getContextClassLoader().getResourceAsStream("pbs.xsd"));
             Schema schema = sf.newSchema(streamSource);
-
 			Unmarshaller un = context.createUnmarshaller();
             un.setSchema(schema);
 			protobufConfiguration = (ProtobufConfiguration) un.unmarshal(file);

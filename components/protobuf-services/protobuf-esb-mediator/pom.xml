@@ -23,15 +23,16 @@
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.wso2.carbon</groupId>
 		<artifactId>protobuf-service</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<modelVersion>4.0.0</modelVersion>
 	<artifactId>protobuf-esb-mediator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>WSO2 Carbon - Protocol Buffer Service ESB Mediator</name>
 	<url>http://wso2.org</url>
 
@@ -84,13 +85,12 @@
 		<dependency>
 			<groupId>org.wso2.carbon</groupId>
 			<artifactId>protobuf-client</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.utils</artifactId>
-            <version>4.0.2</version>
-        </dependency>
+            </dependency>
         <dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
@@ -98,18 +98,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
-	<repositories>
-		<repository>
-			<id>wso2-nexus</id>
-			<name>WSO2 internal Repository</name>
-			<url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</releases>
-		</repository>
-	</repositories>
-
 </project>

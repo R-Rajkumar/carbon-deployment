@@ -24,48 +24,64 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.wso2.carbon</groupId>
 		<artifactId>protobuf-service</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.wso2.carbon</groupId>
+	<modelVersion>4.0.0</modelVersion>
 	<artifactId>protobuf-client</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>WSO2 Carbon - Protocol Buffer Service Client</name>
 	<url>http://wso2.org</url>
-	
 	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.3.7</version>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${pom.groupId}.${pom.artifactId}</Bundle-SymbolicName>
-						<Bundle-Name>${pom.name}</Bundle-Name>
-						<Bundle-Version>${pom.version}</Bundle-Version>
-						<Bundle-Activator>org.wso2.carbon.protobuf.client.Activator</Bundle-Activator>
-						<Private-Package>org.wso2.carbon.protobuf.client</Private-Package>
+						<Bundle-Vendor>WSO2 Inc</Bundle-Vendor>
+						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Name>${project.artifactId}</Bundle-Name>
+						<Bundle-Activator>org.wso2.carbon.protobuf.client.internal.ProtobufClientActivator</Bundle-Activator>
+						<Private-Package>org.wso2.carbon.protobuf.client.internal</Private-Package>
+						<Export-Package>
+							!org.wso2.carbon.protobuf.client.internal,
+							org.wso2.carbon.protobuf.client.*;version="1.0.0"
+						</Export-Package>
+						<Import-Package>
+							com.google.protobuf;version="[2.5,3)",
+							com.googlecode.protobuf.pro.duplex;version="[3.2,4)",
+							com.googlecode.protobuf.pro.duplex.client;version="[3.2,4)",
+							com.googlecode.protobuf.pro.duplex.listener;version="[3.2,4)",
+							com.googlecode.protobuf.pro.duplex.server;version="[3.2,4)",
+							com.googlecode.protobuf.pro.duplex.timeout;version="[3.2,4)",
+							com.googlecode.protobuf.pro.duplex.util;version="[3.2,4)",
+							io.netty.bootstrap;version="[4.0,5)",
+							io.netty.channel;version="[4.0,5)",
+							io.netty.channel.nio;version="[4.0,5)",
+							io.netty.channel.socket.nio;version="[4.0,5)",
+							io.netty.util.concurrent;version="[4.0,5)",
+							org.wso2.carbon.base;version="[1.0,2)",
+							org.slf4j.*;version="[1.7.1, 1.8.0)",
+                            org.osgi.framework.*;version="[1.7.0, 1.8.0)",
+                            org.w3c.dom,
+                            org.xml.sax,
+                            javax.xml.parsers
+						</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
  
  <dependencies>
-		<dependency>
-			<groupId>com.google.protobuf</groupId>
-			<artifactId>protobuf-java</artifactId>
-			<version>2.5.0</version>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
@@ -84,47 +100,7 @@
 			<version>4.0.2</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-transport</artifactId>
-			<version>${netty.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-common</artifactId>
-			<version>${netty.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-handler</artifactId>
-			<version>${netty.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-codec</artifactId>
-			<version>${netty.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-buffer</artifactId>
-			<version>${netty.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.2</version>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
-
-	<properties>
-		<netty.version>4.0.15.Final</netty.version>
-	</properties>
 
 	<repositories>
 		<repository>
