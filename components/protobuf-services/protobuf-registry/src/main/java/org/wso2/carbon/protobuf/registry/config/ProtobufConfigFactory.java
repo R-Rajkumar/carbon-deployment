@@ -15,7 +15,7 @@ public class ProtobufConfigFactory {
 		ProtobufConfiguration protobufConfiguration = null;
 		
 		try {
-			String pbsXmlLocation = System.getProperty(CarbonBaseConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+File.separator+"etc"+File.separator+"pbs1.xml";
+			String pbsXmlLocation = System.getProperty(CarbonBaseConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+File.separator+"etc"+File.separator+"pbs.xml";
 			File file = new File(pbsXmlLocation);
 			JAXBContext context = JAXBContext.newInstance(ProtobufConfiguration.class);
 			Unmarshaller un = context.createUnmarshaller();

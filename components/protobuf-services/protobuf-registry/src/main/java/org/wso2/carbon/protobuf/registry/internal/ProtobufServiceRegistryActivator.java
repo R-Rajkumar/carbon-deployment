@@ -69,17 +69,19 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 
 	public void start(BundleContext bundleContext) {
 
-		log.info("Starting Binary Service Server...");
+		log.info("Starting Protobuf Server...");
 		
 		ProtobufConfiguration configuration = null;
 		try {
 			configuration = ProtobufConfigFactory.build();
 		} catch (ProtobufConfigurationException e) {
-			System.out.println(e);
+			String msg = "Error while loading cluster configuration file " + e.getLocalizedMessage();
+			log.debug(msg);
+			return;
 		}
 
 		if (!configuration.isEnabled()) {
-			log.debug("Binary Service Server is not enabled in pbs xml");
+			log.debug("Protobuf Server is not enabled in pbs xml");
 			return;
 		}
 
@@ -189,6 +191,6 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 	}
 
 	public void stop(BundleContext bundleContext) {
-		log.info("Binary Service Server Shutting Down...");
+		log.info("Protobuf Server Shutting Down...");
 	}
 }
