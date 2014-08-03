@@ -40,6 +40,9 @@ import org.w3c.dom.NodeList;
 import org.wso2.carbon.base.CarbonBaseConstants;
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
+import org.wso2.carbon.protobuf.registry.config.ProtobufConfigFactory;
+import org.wso2.carbon.protobuf.registry.config.ProtobufConfiguration;
+import org.wso2.carbon.protobuf.registry.config.exception.ProtobufConfigurationException;
 import org.xml.sax.SAXException;
 
 /*
@@ -206,7 +209,18 @@ public class ServerConfig {
 	 */
 
 	private void init() {
+		
+		ProtobufConfiguration pconfiguration = null;
+		try {
+			pconfiguration = ProtobufConfigFactory.build();
+		} catch (ProtobufConfigurationException e) {
+			System.out.println(e);
+		}
 
+		
+		System.out.println("///////////////////////////////////////////////////");
+		System.out.println(pconfiguration.getServerConfiguration().getHost());
+		
 		try {
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
