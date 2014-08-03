@@ -71,6 +71,7 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 
 		log.info("Starting Protobuf Server...");
 		
+		//load protobuf server configurations from pbs xml 
 		ProtobufConfiguration configuration = null;
 		try {
 			configuration = ProtobufConfigFactory.build();
