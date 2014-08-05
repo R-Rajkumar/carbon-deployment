@@ -31,7 +31,11 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.protobuf.client.ProtobufClient;
+import org.wso2.carbon.protobuf.client.config.ProtobufConfigFactory;
+import org.wso2.carbon.protobuf.client.config.exception.ProtobufConfigurationException;
+import org.wso2.carbon.protobuf.client.config.ProtobufConfiguration;
 
 import com.google.protobuf.RpcController;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
@@ -69,39 +73,43 @@ public class ProtobufClientActivator implements BundleActivator {
 
 	public void start(BundleContext bundleContext) {
 
-		log.info("Starting Binary Service Client...");
-
-		// load configuration information from pbs xml
-		ProtobufClientConfig clientConfig = new ProtobufClientConfig();
-
-		// if start up failed due to some errors in pbs xml
-		if (clientConfig.isStartUpFailed()) {
-			log.info("Binary Service Client StartUp Failed...");
+		log.info("Starting Protobuf Client...");
+		
+		ProtobufConfiguration configuration = null;
+		try {
+			configuration = ProtobufConfigFactory.build();
+		} catch (ProtobufConfigurationException e) {
+			String msg = "Error while loading cluster configuration file " + e.getLocalizedMessage();
+			log.debug(msg);
 			return;
 		}
 
 		// if Binary Service ESB Client is not enabled in pbs xml
-		if (!clientConfig.isEnablePbs()) {
+		if (!configuration.isEnabled()) {
 			log.debug("Binary Service Client is not enabled in pbs xml");
 			return;
 		}
 
-		// client information
-		PeerInfo client = new PeerInfo(clientConfig.getClientHostName(), clientConfig.getClientPort());
 		// server information
-		PeerInfo server = new PeerInfo(clientConfig.getServerHostName(), clientConfig.getServerPort());
+		PeerInfo server = new PeerInfo(configuration.getServerConfiguration().getHost(), configuration.getServerConfiguration().getPort());
+		
+		// client information
+		PeerInfo client = new PeerInfo(configuration.getClientConfiguration().getHost(), configuration.getClientConfiguration().getPort());
+
 
 		// It works with netty to construct TCP Channel
 		DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory();
 		clientFactory.setClientInfo(client);
 
 		// if SSL encryption is enabled
-		if (clientConfig.isEnableSSL()) {
+		if (configuration.getClientConfiguration().isSSLEnabled()) {
+
+			ServerConfiguration carbonServerConfiguration = ServerConfiguration.getInstance();
 			RpcSSLContext sslCtx = new RpcSSLContext();
-			sslCtx.setKeystorePassword(clientConfig.getKeystorePassword());
-			sslCtx.setKeystorePath(clientConfig.getKeystorePath());
-			sslCtx.setTruststorePassword(clientConfig.getTruststorePassword());
-			sslCtx.setTruststorePath(clientConfig.getTruststorePath());
+			sslCtx.setKeystorePassword(carbonServerConfiguration.getFirstProperty("Security.KeyStore.Password"));
+			sslCtx.setKeystorePath(carbonServerConfiguration.getFirstProperty("Security.KeyStore.Location"));
+			sslCtx.setTruststorePassword(carbonServerConfiguration.getFirstProperty("Security.TrustStore.Password"));
+			sslCtx.setTruststorePath(carbonServerConfiguration.getFirstProperty("Security.TrustStore.Location"));
 
 			try {
 				sslCtx.init();
@@ -116,7 +124,7 @@ public class ProtobufClientActivator implements BundleActivator {
 		// client will terminate after waiting this much of time
 		clientFactory.setConnectResponseTimeoutMillis(10000);
 
-		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(clientConfig.getTimeoutExecutorCorePoolSize(), clientConfig.getTimeoutExecutorMaxPoolSize());
+		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(configuration.getClientConfiguration().getTimeoutExecutorThreadPoolConfiguration().getCorePoolSize(), configuration.getClientConfiguration().getTimeoutExecutorThreadPoolConfiguration().getMaxPoolSize());
 		RpcTimeoutChecker checker = new TimeoutChecker();
 		checker.setTimeoutExecutor(timeoutExecutor);
 		checker.startChecking(clientFactory.getRpcClientRegistry());
@@ -151,15 +159,15 @@ public class ProtobufClientActivator implements BundleActivator {
 		// creates netty bootstrap
 		Bootstrap bootstrap = new Bootstrap();
 
-		EventLoopGroup workers = new NioEventLoopGroup(clientConfig.getChannelHandlersPoolSize(), new RenamingThreadFactoryProxy("workers", Executors.defaultThreadFactory()));
+		EventLoopGroup workers = new NioEventLoopGroup(configuration.getTransportConfiguration().getChannelHandlersConfiguration().getPoolSize(), new RenamingThreadFactoryProxy("workers", Executors.defaultThreadFactory()));
 
 		bootstrap.group(workers);
 		bootstrap.handler(clientFactory);
 		bootstrap.channel(NioSocketChannel.class);
 		bootstrap.option(ChannelOption.TCP_NODELAY, true);
 		bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 0);
-		bootstrap.option(ChannelOption.SO_SNDBUF, clientConfig.getChannelHandlersSendBufferSize());
-		bootstrap.option(ChannelOption.SO_RCVBUF, clientConfig.getChannelHandlersRecieveBufferSize());
+		bootstrap.option(ChannelOption.SO_SNDBUF, configuration.getTransportConfiguration().getChannelHandlersConfiguration().getSendBufferSize());
+		bootstrap.option(ChannelOption.SO_RCVBUF, configuration.getTransportConfiguration().getChannelHandlersConfiguration().getReceiverBufferSize());
 
 		// to shut down the channel gracefully
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();

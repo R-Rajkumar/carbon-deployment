@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ProtobufConfig xmlns="http://wso2.org/projects/carbon/carbon.xml">
+<ProtobufConfig xsi:schemaLocation="http://wso2.com/schema/protobuf/config pbs.xsd"
+         xmlns="http://wso2.com/schema/protobuf/config"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<!-- Enable RPC Binary Client -->
 	<Enable>true</Enable>

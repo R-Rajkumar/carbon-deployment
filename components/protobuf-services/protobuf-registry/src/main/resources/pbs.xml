@@ -57,18 +57,15 @@
 			<Period>1000</Period>
 		</TimeoutCheckerThreadPool>
 
-
 		<Logger>
 			<LogReqProto>false</LogReqProto>
 			<LogResProto>false</LogResProto>
 			<LogEventProto>false</LogEventProto>
 		</Logger>		
 
-
 	</Server>
 
 	<Transport>
-
 		<!--
 			Netty framework TCP transport configuration
 			acceptors - threadpool to accept incomming connections

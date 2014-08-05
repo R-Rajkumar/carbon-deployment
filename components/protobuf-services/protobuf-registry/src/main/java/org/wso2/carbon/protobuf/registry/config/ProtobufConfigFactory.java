@@ -22,7 +22,6 @@ public class ProtobufConfigFactory {
 			String pbsXmlLocation = System.getProperty(CarbonBaseConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+File.separator+"etc"+File.separator+"pbs.xml";
 			File file = new File(pbsXmlLocation);
 			JAXBContext context = JAXBContext.newInstance(ProtobufConfiguration.class);
-
             // validate pbs.xml using the schema
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             StreamSource streamSource = new StreamSource();
