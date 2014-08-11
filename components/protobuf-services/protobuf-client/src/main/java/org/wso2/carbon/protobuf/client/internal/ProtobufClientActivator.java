@@ -59,7 +59,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * 
  * It reads configuration information such as server name, server port, thread
  * pool sizes etc,
- * from pbs xml which should be placed inside repository/config/etc directory of
+ * from pbs xml which is be placed inside repository/config/etc directory of
  * WSO2 ESB.
  * 
  * If WSO2 AS is not running when starting WSO2 ESB, RPC Client will not be
@@ -74,13 +74,14 @@ public class ProtobufClientActivator implements BundleActivator {
 
 	public void start(BundleContext bundleContext) {
 
-		log.info("Starting Protobuf Client...");
-		
+		log.info("Starting ProtobufClient...");
+
 		ProtobufConfiguration configuration = null;
 		try {
 			configuration = ProtobufConfigFactory.build();
 		} catch (ProtobufConfigurationException e) {
-			String msg = "Error while loading cluster configuration file " + e.getLocalizedMessage();
+			String msg = "Error while loading cluster configuration file "
+					+ e.getLocalizedMessage();
 			log.debug(msg);
 			return;
 		}
@@ -92,11 +93,12 @@ public class ProtobufClientActivator implements BundleActivator {
 		}
 
 		// server information
-		PeerInfo server = new PeerInfo(configuration.getServerConfiguration().getHost(), configuration.getServerConfiguration().getPort());
-		
-		// client information
-		PeerInfo client = new PeerInfo(configuration.getClientConfiguration().getHost(), configuration.getClientConfiguration().getPort());
+		PeerInfo server = new PeerInfo(configuration.getServerConfiguration().getHost(),
+				configuration.getServerConfiguration().getPort());
 
+		// client information
+		PeerInfo client = new PeerInfo(configuration.getClientConfiguration().getHost(),
+				configuration.getClientConfiguration().getPort());
 
 		// It works with netty to construct TCP Channel
 		DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory();
@@ -107,10 +109,14 @@ public class ProtobufClientActivator implements BundleActivator {
 
 			ServerConfiguration carbonServerConfiguration = ServerConfiguration.getInstance();
 			RpcSSLContext sslCtx = new RpcSSLContext();
-			sslCtx.setKeystorePassword(carbonServerConfiguration.getFirstProperty("Security.KeyStore.Password"));
-			sslCtx.setKeystorePath(carbonServerConfiguration.getFirstProperty("Security.KeyStore.Location"));
-			sslCtx.setTruststorePassword(carbonServerConfiguration.getFirstProperty("Security.TrustStore.Password"));
-			sslCtx.setTruststorePath(carbonServerConfiguration.getFirstProperty("Security.TrustStore.Location"));
+			sslCtx.setKeystorePassword(carbonServerConfiguration
+					.getFirstProperty("Security.KeyStore.Password"));
+			sslCtx.setKeystorePath(carbonServerConfiguration
+					.getFirstProperty("Security.KeyStore.Location"));
+			sslCtx.setTruststorePassword(carbonServerConfiguration
+					.getFirstProperty("Security.TrustStore.Password"));
+			sslCtx.setTruststorePath(carbonServerConfiguration
+					.getFirstProperty("Security.TrustStore.Location"));
 
 			try {
 				sslCtx.init();
@@ -125,7 +131,10 @@ public class ProtobufClientActivator implements BundleActivator {
 		// client will terminate after waiting this much of time
 		clientFactory.setConnectResponseTimeoutMillis(10000);
 
-		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(configuration.getClientConfiguration().getTimeoutExecutorThreadPoolConfiguration().getCorePoolSize(), configuration.getClientConfiguration().getTimeoutExecutorThreadPoolConfiguration().getMaxPoolSize());
+		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(configuration
+				.getClientConfiguration().getTimeoutExecutorThreadPoolConfiguration()
+				.getCorePoolSize(), configuration.getClientConfiguration()
+				.getTimeoutExecutorThreadPoolConfiguration().getMaxPoolSize());
 		RpcTimeoutChecker checker = new TimeoutChecker();
 		checker.setTimeoutExecutor(timeoutExecutor);
 		checker.startChecking(clientFactory.getRpcClientRegistry());
@@ -133,7 +142,6 @@ public class ProtobufClientActivator implements BundleActivator {
 		// setup a RPC event listener - it just logs what happens
 		RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
 		RpcConnectionEventListener listener = new RpcConnectionEventListener() {
-
 			@Override
 			public void connectionReestablished(RpcClientChannel clientChannel) {
 				log.info("connectionReestablished " + clientChannel);
@@ -160,15 +168,19 @@ public class ProtobufClientActivator implements BundleActivator {
 		// creates netty bootstrap
 		Bootstrap bootstrap = new Bootstrap();
 
-		EventLoopGroup workers = new NioEventLoopGroup(configuration.getTransportConfiguration().getChannelHandlersConfiguration().getPoolSize(), new RenamingThreadFactoryProxy("workers", Executors.defaultThreadFactory()));
+		EventLoopGroup workers = new NioEventLoopGroup(configuration.getTransportConfiguration()
+				.getChannelHandlersConfiguration().getPoolSize(), new RenamingThreadFactoryProxy(
+				"workers", Executors.defaultThreadFactory()));
 
 		bootstrap.group(workers);
 		bootstrap.handler(clientFactory);
 		bootstrap.channel(NioSocketChannel.class);
 		bootstrap.option(ChannelOption.TCP_NODELAY, true);
 		bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 0);
-		bootstrap.option(ChannelOption.SO_SNDBUF, configuration.getTransportConfiguration().getChannelHandlersConfiguration().getSendBufferSize());
-		bootstrap.option(ChannelOption.SO_RCVBUF, configuration.getTransportConfiguration().getChannelHandlersConfiguration().getReceiverBufferSize());
+		bootstrap.option(ChannelOption.SO_SNDBUF, configuration.getTransportConfiguration()
+				.getChannelHandlersConfiguration().getSendBufferSize());
+		bootstrap.option(ChannelOption.SO_RCVBUF, configuration.getTransportConfiguration()
+				.getChannelHandlersConfiguration().getReceiverBufferSize());
 
 		// to shut down the channel gracefully
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
@@ -196,6 +208,6 @@ public class ProtobufClientActivator implements BundleActivator {
 	public void stop(BundleContext bundleContext) {
 		// shut down the channel
 		channel.close();
-		log.info("Binary Service Client Shutting Down...");
+		log.info("ProtobufClient Shutting Down...");
 	}
 }

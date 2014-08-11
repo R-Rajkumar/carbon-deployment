@@ -49,7 +49,7 @@ public class ProtobufServletContextListener implements ServletContextListener {
         // Therefore we should remove all of them when the war is undeployed
         ArrayList<ProtobufServiceData> serviceList = (ArrayList<ProtobufServiceData>) servletContext.getAttribute("services");
 
-        for (Iterator iterator = serviceList.iterator(); iterator.hasNext(); ) {
+        for (Iterator<ProtobufServiceData> iterator = serviceList.iterator(); iterator.hasNext(); ) {
             // getting service information from PBService bean
             ProtobufServiceData pbService = (ProtobufServiceData) iterator.next();
             String serviceName = pbService.getServiceName();

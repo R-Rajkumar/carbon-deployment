@@ -36,7 +36,6 @@ public class ProtobufConfigFactory {
 	public static ProtobufConfiguration build() throws ProtobufConfigurationException {
 
 		ProtobufConfiguration protobufConfiguration = null;
-		
 		try {
 			String pbsXmlLocation = System.getProperty(CarbonBaseConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+File.separator+"etc"+File.separator+"pbs.xml";
 			File file = new File(pbsXmlLocation);

@@ -20,8 +20,7 @@
 package org.wso2.carbon.protobuf.registry.internal;
 
 import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
@@ -33,93 +32,34 @@ import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
  * Any class can get an instance of this class from OSGI run time and use it to
  * rgister/remove services
  */
-public class ProtobufServiceRegistryImpl implements ProtobufServiceRegistry{
-
-	private static Logger log = LoggerFactory.getLogger(ProtobufServiceRegistry.class);
-
+public class ProtobufServiceRegistryImpl implements ProtobufServiceRegistry {
+	
 	private DuplexTcpServerPipelineFactory serverFactory;
 
 	ProtobufServiceRegistryImpl(DuplexTcpServerPipelineFactory serverFactory) {
-
 		this.serverFactory = serverFactory;
 	}
 
 	public String registerBlockingService(BlockingService blockingService) {
-
-		String serviceName = blockingService.getDescriptorForType().getFullName();
-
-		if (serverFactory.getRpcServiceRegistry().resolveService(serviceName) == null) {
-
-			serverFactory.getRpcServiceRegistry().registerService(blockingService);
-
-			return blockingService.getDescriptorForType().getFullName();
-
-		} else {
-
-			String msg = "Duplicate Service " + serviceName;
-			log.info(msg);
-			return null;
-		}
-
+		serverFactory.getRpcServiceRegistry().registerService(blockingService);
+		return blockingService.getDescriptorForType().getFullName();
 	}
 
 	public String registerService(Service service) {
-
-		String serviceName = service.getDescriptorForType().getFullName();
-
-		if (serverFactory.getRpcServiceRegistry().resolveService(serviceName) == null) {
-
-			serverFactory.getRpcServiceRegistry().registerService(service);
-
-			return service.getDescriptorForType().getFullName();
-
-		} else {
-
-			String msg = "Duplicate Service " + serviceName;
-			log.info(msg);
-			return null;
-		}
-
+		serverFactory.getRpcServiceRegistry().registerService(service);
+		return service.getDescriptorForType().getFullName();
 	}
 
 	public String removeBlockingService(String serviceName) {
-
-		try {
-
-			BlockingService blockingService = serverFactory.getRpcServiceRegistry().resolveService(serviceName).getBlockingService();
-
-			serverFactory.getRpcServiceRegistry().removeService(blockingService);
-
-			return blockingService.getDescriptorForType().getFullName();
-
-		} catch (NullPointerException e) {
-
-			String msg = serviceName + " not found";
-			log.info(msg);
-		}
-
-		return null;
-
+		BlockingService blockingService = serverFactory.getRpcServiceRegistry().resolveService(serviceName).getBlockingService();
+		serverFactory.getRpcServiceRegistry().removeService(blockingService);
+		return blockingService.getDescriptorForType().getFullName();
 	}
 
 	public String removeService(String serviceName) {
-
-		try {
-
-			Service service = serverFactory.getRpcServiceRegistry().resolveService(serviceName).getService();
-
-			serverFactory.getRpcServiceRegistry().removeService(service);
-
-			return service.getDescriptorForType().getFullName();
-
-		} catch (NullPointerException e) {
-
-			String msg = serviceName + " not found";
-			log.info(msg);
-		}
-
-		return null;
-
+		Service service = serverFactory.getRpcServiceRegistry().resolveService(serviceName).getService();
+		serverFactory.getRpcServiceRegistry().removeService(service);
+		return service.getDescriptorForType().getFullName();
 	}
 
 }

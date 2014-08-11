@@ -37,7 +37,7 @@
 	<packaging>bundle</packaging>
 	<name>WSO2 Carbon - Protocol Buffer Service Client</name>
 	<url>http://wso2.org</url>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -70,18 +70,18 @@
 							io.netty.util.concurrent;version="[4.0,5)",
 							org.wso2.carbon.base;version="[1.0,2)",
 							org.slf4j.*;version="[1.7.1, 1.8.0)",
-                            org.osgi.framework.*;version="[1.7.0, 1.8.0)",
-                            javax.xml.bind.*;version="[0.0.0, 0.1.0)",
-                            javax.xml.validation.*;version="[0.0.0, 0.1.0)",
-                            javax.xml.transform.*;version="[0.0.0, 0.1.0)",
+							org.osgi.framework.*;version="[1.7.0, 1.8.0)",
+							javax.xml.bind.*;version="[0.0.0, 0.1.0)",
+							javax.xml.validation.*;version="[0.0.0, 0.1.0)",
+							javax.xml.transform.*;version="[0.0.0, 0.1.0)",
 						</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
- 
- <dependencies>
+
+	<dependencies>
 		<dependency>
 			<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
@@ -100,4 +100,5 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	
 </project>

@@ -24,16 +24,8 @@ import org.wso2.carbon.protobuf.client.ProtobufClient;
 import com.google.protobuf.RpcChannel;
 import com.google.protobuf.RpcController;
 
-/*
- * This class keeps an RPC Channel and RPC Controller alive which is created by
- * Activator.
- * Any class can get this channel and controller from OSGI run time and use
- * these to
- * communicate with Binary Services Server which is running on WSO2 Application
- * Server.
- */
-public class ProtobufClientImpl implements ProtobufClient{
-	
+public class ProtobufClientImpl implements ProtobufClient {
+
 	private RpcChannel channel;
 	private RpcController controller;
 

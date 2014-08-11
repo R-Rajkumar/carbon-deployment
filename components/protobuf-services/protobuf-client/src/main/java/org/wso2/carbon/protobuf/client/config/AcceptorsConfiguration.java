@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AcceptorsConfiguration {
-
+	
     @XmlElement(name = "PoolSize", required = true)
     private int poolSize;
     

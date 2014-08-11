@@ -22,8 +22,14 @@ package org.wso2.carbon.protobuf.client;
 import com.google.protobuf.RpcChannel;
 import com.google.protobuf.RpcController;
 
+/*
+ * It keeps an RPC Channel and RPC Controller alive which is created by Protobuf Client
+ * Activator.
+ * Any class can get this channel and controller from OSGI run time and use
+ * these to
+ * communicate with ProtobufServer which is running on WSO2 Application Server.
+ */
 public interface ProtobufClient {
-
 	public RpcChannel getRpcChannel();
 	public RpcController getRpcController();
 }
