@@ -29,7 +29,7 @@ public class ProtobufServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/plain");
-        String filename = "WEB-INF/simplestockquote.proto";
+        String filename = "WEB-INF/service.proto";
         ServletContext context = getServletContext();
         InputStream inputStream = context.getResourceAsStream(filename);
         InputStreamReader inputStreamReader;
