@@ -51,15 +51,16 @@ import com.googlecode.protobuf.format.XmlFormat.ParseException;
  * convert PB to XML
  * hands over the standard XML message to the next mediator.
  */
-
 public class ProtobufMediator extends AbstractMediator {
 
 	private static Logger log = LoggerFactory.getLogger(ProtobufMediator.class);
 
 	// hold all the proto stubs which are loaded from components/lib directory
-	private static ConcurrentHashMap<String, ConcurrentHashMap<String, Class>> serviceStubs = new ConcurrentHashMap<String, ConcurrentHashMap<String, Class>>();
+	private static ConcurrentHashMap<String, ConcurrentHashMap<String, Class>> serviceStubs = 
+			new ConcurrentHashMap<String, ConcurrentHashMap<String, Class>>();
 
-	// These three properties are must in order to find a correct PB method to call.
+	// These three properties are must in order to find a correct PB method to
+	// call.
 	private String stub;
 	private String service;
 	private String method;
@@ -94,9 +95,11 @@ public class ProtobufMediator extends AbstractMediator {
 		// back end RPC server
 		ProtobufClient protobufClient = null;
 		try {
-			protobufClient = (ProtobufClient) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(ProtobufClient.class);
+			protobufClient = (ProtobufClient) PrivilegedCarbonContext.getThreadLocalCarbonContext()
+					.getOSGiService(ProtobufClient.class);
 		} catch (NullPointerException e) {
-			String msg = "Binary Service Client is not running. Make sure back end Binary Server is running and corresponding ports in your pbs xml";
+			String msg = "Binary Service Client is not running. Make sure back end Binary Server is "
+					+ "running and corresponding ports in your pbs xml";
 			log.debug(msg);
 			handleException(msg, mc);
 		}
@@ -184,19 +187,24 @@ public class ProtobufMediator extends AbstractMediator {
 			Message request = builder.build();
 
 			// get newBlockingStub method which will create blocking services
-			Method newBlockingStub = serviceClass.getMethod("newBlockingStub", BlockingRpcChannel.class);
+			Method newBlockingStub = serviceClass.getMethod("newBlockingStub",
+					BlockingRpcChannel.class);
 
 			newBlockingStub.setAccessible(true);
 
 			// get a blocking service version of the service
-			Object blockingService = newBlockingStub.getReturnType().cast(newBlockingStub.invoke(null, protobufClient.getRpcChannel()));
+			Object blockingService = newBlockingStub.getReturnType().cast(
+					newBlockingStub.invoke(null, protobufClient.getRpcChannel()));
 
 			// invoke the required method on the service
-			Method method = blockingService.getClass().getDeclaredMethod(action, RpcController.class, messageClass);
+			Method method = blockingService.getClass().getDeclaredMethod(action,
+					RpcController.class, messageClass);
 
 			method.setAccessible(true);
 
-			Object response = method.getReturnType().cast(method.invoke(blockingService, protobufClient.getRpcController(), method.getParameterTypes()[1].cast(request)));
+			Object response = method.getReturnType().cast(
+					method.invoke(blockingService, protobufClient.getRpcController(),
+							method.getParameterTypes()[1].cast(request)));
 
 			// pb to xml
 			OMElement element = AXIOMUtil.stringToOM(XmlFormat.printToString((Message) response));
@@ -230,7 +238,7 @@ public class ProtobufMediator extends AbstractMediator {
 			handleException(msg, e, mc);
 		} catch (XMLStreamException e) {
 			String msg = "XMLStreamException";
-			handleException(msg, e, mc);;
+			handleException(msg, e, mc);
 		}
 
 		return true;
