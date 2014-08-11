@@ -25,7 +25,7 @@ import com.google.protobuf.Service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.protobuf.annotation.ProtoBufService;
+import org.wso2.carbon.protobuf.annotation.ProtobufService;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServiceData;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServletContextListener;
 import org.wso2.carbon.protobuf.listener.internal.servlet.ProtobufServlet;
@@ -48,7 +48,7 @@ import java.util.Set;
  * It will listen for an annotation (@ProtoBufService) and register services when
  * corresponding wars are deployed.
  */
-@HandlesTypes({ProtoBufService.class})
+@HandlesTypes({ProtobufService.class})
 public class ProtobufServletContainerInitializer implements ServletContainerInitializer {
 
     private static final Log log = LogFactory.getLog(ProtobufServletContainerInitializer.class);
@@ -71,7 +71,7 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
             // Getting binary service registry
             ProtobufServiceRegistry binaryServiceRegistry = (ProtobufServiceRegistry) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(ProtobufServiceRegistry.class);
             // Is it a blocking service or not
-            boolean blocking = clazz.getAnnotation(ProtoBufService.class).blocking();
+            boolean blocking = clazz.getAnnotation(ProtobufService.class).blocking();
             Method reflectiveMethod = null;
             Object serviceObj = null;
             String serviceName;

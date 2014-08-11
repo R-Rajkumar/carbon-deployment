@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)//class level
-public @interface ProtoBufService {
+public @interface ProtobufService {
     //blocking or non-blocking
     public boolean blocking() default true;
 }
