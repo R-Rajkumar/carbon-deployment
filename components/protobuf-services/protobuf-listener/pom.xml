@@ -42,12 +42,12 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>protobuf-registry</artifactId>
-            <version>${project.version}</version>
+            <version>${project.version}</version><!--$NO-MVN-MAN-VER$-->
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>protobuf-annotation</artifactId>
-            <version>${project.version}</version>
+            <version>${project.version}</version><!--$NO-MVN-MAN-VER$-->
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>2.5.0</version>
+            <version>2.5.0</version><!--$NO-MVN-MAN-VER$-->
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -87,7 +87,7 @@
                             org.apache.commons.logging;version="[1.1,2)",
                             javax.servlet;version="${imp.pkg.version.javax.servlet}",
                             javax.servlet.http;version="${imp.pkg.version.javax.servlet}",
-                            javax.servlet.annotation,
+                            javax.servlet.annotation;version="${imp.pkg.version.javax.servlet}",
                             org.wso2.carbon.context;version="[4.0,5)"
                         </Import-Package>
                         <Require-Capability>osgi.extender;
