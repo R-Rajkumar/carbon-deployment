@@ -37,12 +37,12 @@ public class ProtobufServlet extends HttpServlet {
         PrintWriter out = null;
         if (inputStream != null) {
             try {
-                inputStreamReader = new InputStreamReader(inputStream);
+                inputStreamReader = new InputStreamReader(inputStream,"UTF-8");
                 reader = new BufferedReader(inputStreamReader);
                 out = response.getWriter();
-                String text;
-                while ((text = reader.readLine()) != null) {
-                    out.println(text);
+                String fileContent;
+                while ((fileContent = reader.readLine()) != null) {
+                    out.println(fileContent);
                 }
             } finally {
                 if (out != null) {
