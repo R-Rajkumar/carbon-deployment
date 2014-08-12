@@ -39,16 +39,8 @@ public class ProtobufServiceData {
 	protected String getServiceName() {
 		return serviceName;
 	}
-
-	protected void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-
+ 
 	protected String getServiceType() {
 		return serviceType;
-	}
-
-	protected void setServiceType(String serviceType) {
-		this.serviceType = serviceType;
 	}
 }
