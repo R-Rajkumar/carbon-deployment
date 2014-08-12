@@ -42,26 +42,6 @@
             <artifactId>protobuf-rpc-pro-duplex</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-transport</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-handler</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-buffer</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
@@ -120,16 +100,8 @@
                                 <bundleDef>org.wso2.carbon:protobuf-annotation</bundleDef>
                                 <bundleDef>org.wso2.carbon:protobuf-registry</bundleDef>
                                 <bundleDef>com.googlecode.protobuf-rpc-pro:protobuf-rpc-pro-duplex</bundleDef>
-                                <bundleDef>io.netty:netty-transport</bundleDef>
-                                <bundleDef>io.netty:netty-common</bundleDef>
-                                <bundleDef>io.netty:netty-handler</bundleDef>
-                                <bundleDef>io.netty:netty-codec</bundleDef>
-                                <bundleDef>io.netty:netty-buffer</bundleDef>
                                 <bundleDef>org.slf4j:slf4j-api</bundleDef>
                             </bundles>
-                            <!--<importFeatures>
-                                <importFeatureDef>org.wso2.carbon.protobuf.annotation.server:${protobuf.service.version}</importFeatureDef>
-                            </importFeatures>-->
                         </configuration>
                     </execution>
                 </executions>
