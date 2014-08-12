@@ -12,11 +12,10 @@
 
     <artifactId>org.wso2.carbon.aries.spifly.server.feature</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
     <name>WSO2 support for aries spifly</name>
     <url>http://wso2.org</url>
     <description>
-        This feature contains the bundles required for apache aries spifly
+        This feature contains the bundles required for providing apache aries spifly bundles.
     </description>
 
     <dependencies>
@@ -61,9 +60,6 @@
                                 <bundleDef>org.apache.aries:org.apache.aries.util</bundleDef>
                                 <bundleDef>org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle</bundleDef>
                             </bundles>
-                            <!--<importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
-                            </importFeatures>-->
                         </configuration>
                     </execution>
                 </executions>
