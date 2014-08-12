@@ -79,7 +79,7 @@ public class ProtobufClientActivator implements BundleActivator {
 		try {
 			configuration = ProtobufConfigFactory.build();
 		} catch (ProtobufConfigurationException e) {
-			String msg = "Error while loading cluster configuration file "
+			String msg = "Error while loading pbs xml file "
 					+ e.getLocalizedMessage();
 			log.debug(msg);
 			return;
@@ -87,18 +87,16 @@ public class ProtobufClientActivator implements BundleActivator {
 
 		// if Binary Service ESB Client is not enabled in pbs xml
 		if (!configuration.isEnabled()) {
-			log.debug("Binary Service Client is not enabled in pbs xml");
+			log.debug("ProtobufClient is not enabled in pbs xml");
 			return;
 		}
 
 		// server information
 		PeerInfo server = new PeerInfo(configuration.getServerConfiguration().getHost(),
 				configuration.getServerConfiguration().getPort());
-
 		// client information
 		PeerInfo client = new PeerInfo(configuration.getClientConfiguration().getHost(),
 				configuration.getClientConfiguration().getPort());
-
 		// It works with netty to construct TCP Channel
 		DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory();
 		clientFactory.setClientInfo(client);
@@ -131,6 +129,7 @@ public class ProtobufClientActivator implements BundleActivator {
 		//  to compress all data traffic to and from the server, you can switch on compression
 		clientFactory.setCompression(configuration.getClientConfiguration().isCompressionEnabled());
 		
+		//TimeoutExecutor uses a pool of threads to handle the timeout of client and server side RPC calls.
 		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(configuration
 				.getClientConfiguration().getTimeoutExecutorThreadPoolConfiguration()
 				.getCorePoolSize(), configuration.getClientConfiguration()
@@ -144,19 +143,19 @@ public class ProtobufClientActivator implements BundleActivator {
 		RpcConnectionEventListener listener = new RpcConnectionEventListener() {
 			@Override
 			public void connectionReestablished(RpcClientChannel clientChannel) {
-				log.info("connectionReestablished " + clientChannel);
+				log.info("Protobuf connection Reestablished " + clientChannel);
 			}
 			@Override
 			public void connectionOpened(RpcClientChannel clientChannel) {
-				log.info("connectionOpened " + clientChannel);
+				log.info("Protobuf connection Opened " + clientChannel);
 			}
 			@Override
 			public void connectionLost(RpcClientChannel clientChannel) {
-				log.info("connectionLost " + clientChannel);
+				log.info("Protobuf connection Lost " + clientChannel);
 			}
 			@Override
 			public void connectionChanged(RpcClientChannel clientChannel) {
-				log.info("connectionChanged " + clientChannel);
+				log.info("Protobuf connection Changed " + clientChannel);
 			}
 		};
 		rpcEventNotifier.setEventListener(listener);
@@ -198,8 +197,9 @@ public class ProtobufClientActivator implements BundleActivator {
 	}
 
 	public void stop(BundleContext bundleContext) {
-		// shut down the channel
+		// shut down the channel and reset controller
 		channel.close();
+		controller.reset();
 		log.info("ProtobufClient Shutting Down...");
 	}
 }

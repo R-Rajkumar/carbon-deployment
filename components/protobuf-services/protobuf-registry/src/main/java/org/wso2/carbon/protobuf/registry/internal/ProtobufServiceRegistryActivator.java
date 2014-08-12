@@ -75,7 +75,7 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		try {
 			configuration = ProtobufConfigFactory.build();
 		} catch (ProtobufConfigurationException e) {
-			String msg = "Error while loading cluster configuration file "
+			String msg = "Error while loading pbs xml file "
 					+ e.getLocalizedMessage();
 			log.debug(msg);
 			return;
@@ -119,7 +119,6 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 				sslCtx.init();
 			} catch (Exception e) {
 				log.error("Couldn't create SSL Context : " + e.getLocalizedMessage());
-				log.info("SSL not enanbled");
 			}
 			serverFactory.setSslContext(sslCtx);
 		}
@@ -137,19 +136,19 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		RpcConnectionEventListener listener = new RpcConnectionEventListener() {
 			@Override
 			public void connectionReestablished(RpcClientChannel clientChannel) {
-				log.info("connectionReestablished " + clientChannel);
+				log.info("Protobuf connection Reestablished " + clientChannel);
 			}
 			@Override
 			public void connectionOpened(RpcClientChannel clientChannel) {
-				log.info("connectionOpened " + clientChannel);
+				log.info("Protobuf connection Opened " + clientChannel);
 			}
 			@Override
 			public void connectionLost(RpcClientChannel clientChannel) {
-				log.info("connectionLost " + clientChannel);
+				log.info("Protobuf connection Lost " + clientChannel);
 			}
 			@Override
 			public void connectionChanged(RpcClientChannel clientChannel) {
-				log.info("connectionChanged " + clientChannel);
+				log.info("Protobuf connection Changed " + clientChannel);
 			}
 		};
 		rpcEventNotifier.setEventListener(listener);
