@@ -29,6 +29,7 @@
             <xs:element name="CorePoolSize" type="xs:int"/>
             <xs:element name="MaxPoolSize" type="xs:int"/>
             <xs:element name="MaxPoolTimeout" type="xs:int"/>
+            <xs:element name="WorkQueueCapacity" type="xs:int"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="timeoutExecutorThreadPoolConfiguration">

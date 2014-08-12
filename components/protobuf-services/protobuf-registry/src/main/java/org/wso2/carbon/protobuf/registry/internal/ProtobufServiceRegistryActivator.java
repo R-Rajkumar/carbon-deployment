@@ -75,8 +75,7 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		try {
 			configuration = ProtobufConfigFactory.build();
 		} catch (ProtobufConfigurationException e) {
-			String msg = "Error while loading pbs xml file "
-					+ e.getLocalizedMessage();
+			String msg = "Error while loading pbs xml file " + e.getLocalizedMessage();
 			log.debug(msg);
 			return;
 		}
@@ -90,13 +89,15 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		PeerInfo serverInfo = new PeerInfo(configuration.getServerConfiguration().getHost(),
 				configuration.getServerConfiguration().getPort());
 
-		//call executor
+		// call executor
 		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(configuration
 				.getServerConfiguration().getServerCallExecutorThreadPoolConfiguration()
 				.getCorePoolSize(), configuration.getServerConfiguration()
 				.getServerCallExecutorThreadPoolConfiguration().getMaxPoolSize(), configuration
 				.getServerConfiguration().getServerCallExecutorThreadPoolConfiguration()
-				.getMaxPoolTimeout(), TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(1000),
+				.getMaxPoolTimeout(), TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(
+				configuration.getServerConfiguration()
+						.getServerCallExecutorThreadPoolConfiguration().getWorkQueueCapacity()),
 				Executors.defaultThreadFactory());
 
 		serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
@@ -138,14 +139,17 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 			public void connectionReestablished(RpcClientChannel clientChannel) {
 				log.info("Protobuf connection Reestablished " + clientChannel);
 			}
+
 			@Override
 			public void connectionOpened(RpcClientChannel clientChannel) {
 				log.info("Protobuf connection Opened " + clientChannel);
 			}
+
 			@Override
 			public void connectionLost(RpcClientChannel clientChannel) {
 				log.info("Protobuf connection Lost " + clientChannel);
 			}
+
 			@Override
 			public void connectionChanged(RpcClientChannel clientChannel) {
 				log.info("Protobuf connection Changed " + clientChannel);

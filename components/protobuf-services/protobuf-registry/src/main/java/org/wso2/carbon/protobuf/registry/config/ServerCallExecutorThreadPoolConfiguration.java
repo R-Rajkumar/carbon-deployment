@@ -34,6 +34,9 @@ public class ServerCallExecutorThreadPoolConfiguration {
     
     @XmlElement(name = "MaxPoolTimeout", required = true)
     private int maxPoolTimeout;
+    
+    @XmlElement(name = "WorkQueueCapacity", required = true)
+    private int workQueueCapacity;
 
 	public int getCorePoolSize() {
 		return corePoolSize;
@@ -57,5 +60,13 @@ public class ServerCallExecutorThreadPoolConfiguration {
 
 	public void setMaxPoolTimeout(int maxPoolTimeout) {
 		this.maxPoolTimeout = maxPoolTimeout;
+	}
+
+	public int getWorkQueueCapacity() {
+		return workQueueCapacity;
+	}
+
+	public void setWorkQueueCapacity(int workQueueCapacity) {
+		this.workQueueCapacity = workQueueCapacity;
 	}
 }

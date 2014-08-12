@@ -114,7 +114,7 @@ public class ProtobufClientActivator implements BundleActivator {
 					.getFirstProperty("Security.TrustStore.Password"));
 			sslCtx.setTruststorePath(carbonServerConfiguration
 					.getFirstProperty("Security.TrustStore.Location"));
-			
+
 			try {
 				sslCtx.init();
 			} catch (Exception e) {

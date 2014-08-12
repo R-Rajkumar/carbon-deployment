@@ -30,6 +30,7 @@
 			<CorePoolSize>16</CorePoolSize>
 			<MaxPoolSize>200</MaxPoolSize>
 			<MaxPoolTimeout>30</MaxPoolTimeout>
+			<WorkQueueCapacity>1000</WorkQueueCapacity>
 		</ServerCallExecutorThreadPool>
 
 		<!--
