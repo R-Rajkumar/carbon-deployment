@@ -4,7 +4,7 @@
          xmlns="http://wso2.com/schema/protobuf/config"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-	<!-- Enable RPC Binary Client -->
+	<!-- Enable ProtobufClient -->
 	<Enable>true</Enable>
 
 	<Server> 

@@ -25,13 +25,6 @@ import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
 
-/*
- * This class provides APIs to register and remove services from Binary Service
- * Registry.
- * 
- * Any class can get an instance of this class from OSGI run time and use it to
- * rgister/remove services
- */
 public class ProtobufServiceRegistryImpl implements ProtobufServiceRegistry {
 	
 	private DuplexTcpServerPipelineFactory serverFactory;
@@ -61,5 +54,4 @@ public class ProtobufServiceRegistryImpl implements ProtobufServiceRegistry {
 		serverFactory.getRpcServiceRegistry().removeService(service);
 		return service.getDescriptorForType().getFullName();
 	}
-
 }

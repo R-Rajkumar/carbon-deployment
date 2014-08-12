@@ -61,11 +61,9 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * It reads configuration information from pbs xml which should be placed
  * inside AS's components/repository/lib directory.
  */
-
 public class ProtobufServiceRegistryActivator implements BundleActivator {
 
 	private static Logger log = LoggerFactory.getLogger(ProtobufServiceRegistry.class);
-
 	static DuplexTcpServerPipelineFactory serverFactory;
 
 	public void start(BundleContext bundleContext) {
@@ -101,12 +99,10 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 				Executors.defaultThreadFactory());
 
 		serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
-
 		serverFactory.setRpcServerCallExecutor(executor);
 
 		// if SSL encryption is enabled
 		if (configuration.getServerConfiguration().isSSLEnabled()) {
-
 			ServerConfiguration carbonServerConfiguration = ServerConfiguration.getInstance();
 			RpcSSLContext sslCtx = new RpcSSLContext();
 			sslCtx.setKeystorePassword(carbonServerConfiguration
@@ -124,7 +120,6 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 				log.error("Couldn't create SSL Context : " + e.getLocalizedMessage());
 				log.info("SSL not enanbled");
 			}
-
 			serverFactory.setSslContext(sslCtx);
 		}
 
@@ -139,22 +134,18 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		// setup a RPC event listener - it just logs what happens
 		RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
 		RpcConnectionEventListener listener = new RpcConnectionEventListener() {
-
 			@Override
 			public void connectionReestablished(RpcClientChannel clientChannel) {
 				log.info("connectionReestablished " + clientChannel);
 			}
-
 			@Override
 			public void connectionOpened(RpcClientChannel clientChannel) {
 				log.info("connectionOpened " + clientChannel);
 			}
-
 			@Override
 			public void connectionLost(RpcClientChannel clientChannel) {
 				log.info("connectionLost " + clientChannel);
 			}
-
 			@Override
 			public void connectionChanged(RpcClientChannel clientChannel) {
 				log.info("connectionChanged " + clientChannel);
@@ -214,15 +205,12 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 
 		// Bind and start to accept incoming connections.
 		bootstrap.bind();
-
 		log.info("Serving " + serverInfo);
-
 		// Register Binary Service Registry as an OSGi service
 		ProtobufServiceRegistry protobufServiceRegistry = new ProtobufServiceRegistryImpl(
 				serverFactory);
 		bundleContext.registerService(ProtobufServiceRegistry.class.getName(),
 				protobufServiceRegistry, null);
-
 	}
 
 	public void stop(BundleContext bundleContext) {

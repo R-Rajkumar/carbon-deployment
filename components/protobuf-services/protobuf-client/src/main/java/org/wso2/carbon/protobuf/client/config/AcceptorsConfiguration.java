@@ -58,5 +58,4 @@ public class AcceptorsConfiguration {
 	public void setReceiverBufferSize(int receiverBufferSize) {
 		this.receiverBufferSize = receiverBufferSize;
 	}
-
 }

@@ -68,14 +68,13 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 public class ProtobufClientActivator implements BundleActivator {
 
 	private static Logger log = LoggerFactory.getLogger(ProtobufClientImpl.class);
-
 	private static RpcClientChannel channel = null;
 	private static RpcController controller = null;
 
 	public void start(BundleContext bundleContext) {
 
 		log.info("Starting ProtobufClient...");
-
+		//reading pbs xml
 		ProtobufConfiguration configuration = null;
 		try {
 			configuration = ProtobufConfigFactory.build();
@@ -117,17 +116,15 @@ public class ProtobufClientActivator implements BundleActivator {
 					.getFirstProperty("Security.TrustStore.Password"));
 			sslCtx.setTruststorePath(carbonServerConfiguration
 					.getFirstProperty("Security.TrustStore.Location"));
-
+			
 			try {
 				sslCtx.init();
 			} catch (Exception e) {
 				log.error("Couldn't create SSL Context : " + e.getLocalizedMessage());
 				log.info("SSL not enanbled");
 			}
-
 			clientFactory.setSslContext(sslCtx);
 		}
-
 		// client will terminate after waiting this much of time
 		clientFactory.setConnectResponseTimeoutMillis(10000);
 
@@ -146,17 +143,14 @@ public class ProtobufClientActivator implements BundleActivator {
 			public void connectionReestablished(RpcClientChannel clientChannel) {
 				log.info("connectionReestablished " + clientChannel);
 			}
-
 			@Override
 			public void connectionOpened(RpcClientChannel clientChannel) {
 				log.info("connectionOpened " + clientChannel);
 			}
-
 			@Override
 			public void connectionLost(RpcClientChannel clientChannel) {
 				log.info("connectionLost " + clientChannel);
 			}
-
 			@Override
 			public void connectionChanged(RpcClientChannel clientChannel) {
 				log.info("connectionChanged " + clientChannel);
@@ -167,11 +161,9 @@ public class ProtobufClientActivator implements BundleActivator {
 
 		// creates netty bootstrap
 		Bootstrap bootstrap = new Bootstrap();
-
 		EventLoopGroup workers = new NioEventLoopGroup(configuration.getTransportConfiguration()
 				.getChannelHandlersConfiguration().getPoolSize(), new RenamingThreadFactoryProxy(
 				"workers", Executors.defaultThreadFactory()));
-
 		bootstrap.group(workers);
 		bootstrap.handler(clientFactory);
 		bootstrap.channel(NioSocketChannel.class);
@@ -189,20 +181,17 @@ public class ProtobufClientActivator implements BundleActivator {
 		shutdownHandler.addResource(bootstrap.group());
 
 		try {
-			// connect with server
+			// connect to the server
 			channel = clientFactory.peerWith(server, bootstrap);
 			controller = channel.newRpcController();
-
-			// register Binary Service Client as an OSGi service
+			// register ProtobufClient as an OSGi service
 			ProtobufClient protobufClient = new ProtobufClientImpl(channel, controller);
 			bundleContext.registerService(ProtobufClient.class.getName(), protobufClient, null);
-
 		} catch (IOException e) {
-			// can happen if Address is already in use and so on
+			// can happen if Address is already in use
 			String msg = "IOException " + e.getLocalizedMessage();
 			log.error(msg);
 		}
-
 	}
 
 	public void stop(BundleContext bundleContext) {

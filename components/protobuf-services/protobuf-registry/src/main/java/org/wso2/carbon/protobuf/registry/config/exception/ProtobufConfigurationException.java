@@ -20,10 +20,10 @@
 package org.wso2.carbon.protobuf.registry.config.exception;
 
 /**
- * Exception which gets thrown when an error occur while trying read, build cluster.xml
+ * Exception which gets thrown when an error occur while trying read, build pbs.xml
  */
-
 public class ProtobufConfigurationException extends Exception {
+	
     public ProtobufConfigurationException(String message) {
         super (message);
     }
