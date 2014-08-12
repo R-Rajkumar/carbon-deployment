@@ -20,7 +20,17 @@
 			If true keystore and truststore information will be retrieved from carbon xml
 		-->		
 	 	<EnableSSL>false</EnableSSL>
-
+	 	
+	 	<!-- 
+		 Compressing
+		 -->
+		<EnableCompression>false</EnableCompression>
+	 	
+	 	<!-- 
+		 Client will terminate after waiting this much of time (in ms)
+		 -->
+		<ConnectResponseTimeoutMillis>10000</ConnectResponseTimeoutMillis>
+		
 		<!--
 			TimeoutExecutor uses a pool of threads to handle the timeout of client and server side RPC calls
 			corePoolSize - the number of threads to keep in the pool, even if they are idle
@@ -45,7 +55,7 @@
 			<CorePoolSize>1</CorePoolSize>
 			<Period>1000</Period>
 		</TimeoutCheckerThreadPool>
-
+		
 	</Client>
 
 	<Transport>

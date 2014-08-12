@@ -90,6 +90,7 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		PeerInfo serverInfo = new PeerInfo(configuration.getServerConfiguration().getHost(),
 				configuration.getServerConfiguration().getPort());
 
+		//call executor
 		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(configuration
 				.getServerConfiguration().getServerCallExecutorThreadPoolConfiguration()
 				.getCorePoolSize(), configuration.getServerConfiguration()

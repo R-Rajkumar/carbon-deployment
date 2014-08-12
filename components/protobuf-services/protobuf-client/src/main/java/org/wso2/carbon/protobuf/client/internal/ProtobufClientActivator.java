@@ -125,9 +125,12 @@ public class ProtobufClientActivator implements BundleActivator {
 			}
 			clientFactory.setSslContext(sslCtx);
 		}
+		
 		// client will terminate after waiting this much of time
-		clientFactory.setConnectResponseTimeoutMillis(10000);
-
+		clientFactory.setConnectResponseTimeoutMillis(configuration.getClientConfiguration().getConnectResponseTimeoutMillis());
+		//  to compress all data traffic to and from the server, you can switch on compression
+		clientFactory.setCompression(configuration.getClientConfiguration().isCompressionEnabled());
+		
 		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(configuration
 				.getClientConfiguration().getTimeoutExecutorThreadPoolConfiguration()
 				.getCorePoolSize(), configuration.getClientConfiguration()

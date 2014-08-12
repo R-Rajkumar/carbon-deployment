@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
-			<version>3.2.3</version>
+			<version>3.2.3</version><!--$NO-MVN-MAN-VER$-->
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

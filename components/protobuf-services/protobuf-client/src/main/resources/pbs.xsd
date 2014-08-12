@@ -25,6 +25,8 @@
             <xs:element name="Host" type="xs:string"/>
             <xs:element name="Port" type="xs:int"/>
             <xs:element name="EnableSSL" type="xs:boolean"/>
+            <xs:element name="EnableCompression" type="xs:boolean"/>
+            <xs:element name="ConnectResponseTimeoutMillis" type="xs:int"/>
             <xs:element name="TimeoutExecutorThreadPool" type="tns:timeoutExecutorThreadPoolConfiguration"/>
             <xs:element name="TimeoutCheckerThreadPool" type="tns:timeoutCheckerThreadPoolConfiguration"/>
         </xs:sequence>

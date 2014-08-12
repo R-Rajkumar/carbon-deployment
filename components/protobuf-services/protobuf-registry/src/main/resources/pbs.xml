@@ -46,7 +46,7 @@
 		</TimeoutExecutorThreadPool>
 		
 		<!--
-		 TimeoutChecker Monitors all RPC client and server calls for all RpcChannels
+		 TimeoutChecker monitors all RPC client and server calls for all RpcChannels
 		 timeoutCheckerThreadPool contains configuration of timeoutchecker
 		 corePoolSize - the number of threads to keep in the pool, even if they are idle
 		 periodMs - Time period in MILLISECONDS, to monitor (check timeouts) periodically (this timeout check process
@@ -57,6 +57,9 @@
 			<Period>1000</Period>
 		</TimeoutCheckerThreadPool>
 
+		<!-- 
+		 Logging level
+	    -->
 		<Logger>
 			<LogReqProto>false</LogReqProto>
 			<LogResProto>false</LogResProto>

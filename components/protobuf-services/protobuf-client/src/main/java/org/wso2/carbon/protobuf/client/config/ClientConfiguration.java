@@ -35,6 +35,12 @@ public class ClientConfiguration {
     @XmlElement(name = "EnableSSL", required = true, type = Boolean.class)
     private boolean isSSLEnabled;
     
+    @XmlElement(name = "EnableCompression", required = true, type = Boolean.class)
+    private boolean isCompressionEnabled;
+    
+    @XmlElement(name = "ConnectResponseTimeoutMillis", required = true)
+    private int connectResponseTimeoutMillis;
+    
     @XmlElement(name = "TimeoutExecutorThreadPool", required = true)
     private TimeoutExecutorThreadPoolConfiguration timeoutExecutorThreadPoolConfiguration;
     
@@ -63,6 +69,22 @@ public class ClientConfiguration {
 
 	public void setSSLEnabled(boolean isSSLEnabled) {
 		this.isSSLEnabled = isSSLEnabled;
+	}
+
+	public boolean isCompressionEnabled() {
+		return isCompressionEnabled;
+	}
+
+	public void setCompressionEnabled(boolean isCompressionEnabled) {
+		this.isCompressionEnabled = isCompressionEnabled;
+	}
+
+	public int getConnectResponseTimeoutMillis() {
+		return connectResponseTimeoutMillis;
+	}
+
+	public void setConnectResponseTimeoutMillis(int connectResponseTimeoutMillis) {
+		this.connectResponseTimeoutMillis = connectResponseTimeoutMillis;
 	}
 
 	public TimeoutExecutorThreadPoolConfiguration getTimeoutExecutorThreadPoolConfiguration() {
