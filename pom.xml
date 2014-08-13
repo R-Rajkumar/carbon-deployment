@@ -855,22 +855,22 @@
             <!--protobuf services dependencies-->
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
-                <artifactId>protobuf-annotation</artifactId>
+                <artifactId>org.wso2.carbon.protobuf.annotation</artifactId>
                 <version>${protobuf.service.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
-                <artifactId>protobuf-listener</artifactId>
+                <artifactId>org.wso2.carbon.protobuf.listener</artifactId>
                 <version>${protobuf.service.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>${protobuf.version}</version>
+                <version>${google.protobuf.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
-                <artifactId>protobuf-registry</artifactId>
+                <artifactId>org.wso2.carbon.protobuf.registry</artifactId>
                 <version>${protobuf.service.version}</version>
             </dependency>
             <dependency>
@@ -1247,12 +1247,12 @@
 
         <!--protobuf service-->
         <protobuf.service.version>1.0.0-SNAPSHOT</protobuf.service.version>
-        <protobuf.version>2.5.0</protobuf.version>
+        <google.protobuf.version>2.5.0</google.protobuf.version>
         <protobuf-rpc-pro-duplex.version>3.2.3</protobuf-rpc-pro-duplex.version>
         <netty.version>4.0.15.Final</netty.version>
         <slf4j-api.version>1.7.2</slf4j-api.version>
     </properties>
-
+    [1.6.1.wso2v11-SNAPSHOT, 1.7.0)
     <repositories>
         <!-- Before adding ANYTHING in here, please start a discussion on the dev list.
              Ideally the Axis2 build should only use Maven central (which is available
