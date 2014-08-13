@@ -53,7 +53,6 @@
 						<Private-Package>org.wso2.carbon.protobuf.registry.internal</Private-Package>
 						<Export-Package>
 							!org.wso2.carbon.protobuf.registry.internal,
-							
 							org.wso2.carbon.protobuf.registry.*;version="${project.version}"
 						</Export-Package>
 						<Import-Package>
@@ -80,7 +79,6 @@
 					</instructions>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 
