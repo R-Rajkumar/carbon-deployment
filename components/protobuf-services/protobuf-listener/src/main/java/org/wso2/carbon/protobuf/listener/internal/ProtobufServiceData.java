@@ -39,7 +39,7 @@ public class ProtobufServiceData {
 	protected String getServiceName() {
 		return serviceName;
 	}
- 
+
 	protected String getServiceType() {
 		return serviceType;
 	}

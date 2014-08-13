@@ -27,32 +27,32 @@ import java.io.*;
 
 public class ProtobufServlet extends HttpServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/plain");
-        String filename = "WEB-INF/service.proto";
-        ServletContext context = getServletContext();
-        InputStream inputStream = context.getResourceAsStream(filename);
-        InputStreamReader inputStreamReader;
-        BufferedReader reader = null;
-        PrintWriter out = null;
-        if (inputStream != null) {
-            try {
-                inputStreamReader = new InputStreamReader(inputStream,"UTF-8");
-                reader = new BufferedReader(inputStreamReader);
-                out = response.getWriter();
-                String fileContent;
-                while ((fileContent = reader.readLine()) != null) {
-                    out.println(fileContent);
-                }
-            } finally {
-                if (out != null) {
-                    out.flush();
-                    out.close();
-                }
-                if (reader != null) {
-                    reader.close();
-                }
-            }
-        }
-    }
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setContentType("text/plain");
+		String filename = "WEB-INF/service.proto";
+		ServletContext context = getServletContext();
+		InputStream inputStream = context.getResourceAsStream(filename);
+		InputStreamReader inputStreamReader;
+		BufferedReader reader = null;
+		PrintWriter out = null;
+		if (inputStream != null) {
+			try {
+				inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+				reader = new BufferedReader(inputStreamReader);
+				out = response.getWriter();
+				String fileContent;
+				while ((fileContent = reader.readLine()) != null) {
+					out.println(fileContent);
+				}
+			} finally {
+				if (out != null) {
+					out.flush();
+					out.close();
+				}
+				if (reader != null) {
+					reader.close();
+				}
+			}
+		}
+	}
 }

@@ -50,6 +50,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
+                        	!org.wso2.carbon.protobuf.listener.internal,
                             org.wso2.carbon.protobuf.listener.*; version="${project.version}"
                         </Export-Package>
                         <Import-Package>
@@ -78,7 +79,7 @@
 		<dependency>
 			<groupId>org.wso2.carbon</groupId>
 			<artifactId>org.wso2.carbon.protobuf.registry</artifactId>
-			<version>${project.version}</version><!--$NO-MVN-MAN-VER$ -->
+			<version>${project.version}</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 		<dependency>
 			<groupId>org.wso2.carbon</groupId>
