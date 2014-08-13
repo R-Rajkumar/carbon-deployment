@@ -1252,7 +1252,7 @@
         <netty.version>4.0.15.Final</netty.version>
         <slf4j-api.version>1.7.2</slf4j-api.version>
     </properties>
-    [1.6.1.wso2v11-SNAPSHOT, 1.7.0)
+    
     <repositories>
         <!-- Before adding ANYTHING in here, please start a discussion on the dev list.
              Ideally the Axis2 build should only use Maven central (which is available
