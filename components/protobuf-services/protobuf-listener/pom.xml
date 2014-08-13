@@ -33,7 +33,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>protobuf-listener</artifactId>
+    <artifactId>org.wso2.carbon.protobuf.protobuf.listener</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Protocol Buffer Service Listener</name>
     <url>http://wso2.org</url>
@@ -75,7 +75,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-Vendor>WSO2 Inc</Bundle-Vendor>
-                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
                             org.wso2.carbon.protobuf.listener.*; version="${project.version}"

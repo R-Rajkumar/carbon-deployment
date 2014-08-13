@@ -33,7 +33,7 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>protobuf-client</artifactId>
+	<artifactId>org.wso2.carbon.protobuf.client</artifactId>
 	<packaging>bundle</packaging>
 	<name>WSO2 Carbon - Protocol Buffer Service Client</name>
 	<url>http://wso2.org</url>
@@ -47,7 +47,7 @@
 				<configuration>
 					<instructions>
 						<Bundle-Vendor>WSO2 Inc</Bundle-Vendor>
-						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Bundle-Activator>org.wso2.carbon.protobuf.client.internal.ProtobufClientActivator</Bundle-Activator>
 						<Private-Package>org.wso2.carbon.protobuf.client.internal</Private-Package>
