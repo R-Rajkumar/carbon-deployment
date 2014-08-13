@@ -23,8 +23,7 @@ import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 
 /*
- * It provides APIs to register and remove services from Binary Service
- * Registry.
+ * It provides APIs to register and remove services to/from Protobuf Service Registry.
  * 
  * Any class can get an instance of this class from OSGI run time and use it to
  * register/remove services

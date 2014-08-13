@@ -50,7 +50,7 @@
 						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Export-Package>
-							org.wso2.carbon.protobuf.annotation.*; version="1.0.0"
+							org.wso2.carbon.protobuf.annotation.*; version="${project.version}"
 						</Export-Package>
 					</instructions>
 				</configuration>

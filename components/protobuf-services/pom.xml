@@ -27,6 +27,18 @@
 
 	<name>WSO2 Carbon - Protocol Buffer Service</name>
 	<url>http://wso2.org</url>
+	
+	<properties>
+		<imp.pkg.version.protobuf-rpc-pro>[3.2,4)</imp.pkg.version.protobuf-rpc-pro>
+		<imp.pkg.version.google-protobuf>[2.5,3)</imp.pkg.version.google-protobuf>
+		<imp.pkg.version.netty>[4.0,5)</imp.pkg.version.netty>
+		<imp.pkg.version.javax.xml>[0.0.0, 0.1.0)</imp.pkg.version.javax.xml>
+		<imp.pkg.version.slf4j-api>[1.7.1, 1.8.0)</imp.pkg.version.slf4j-api>
+		<imp.pkg.version.osgi-framework>[1.7.0, 1.8.0)</imp.pkg.version.osgi-framework>
+		<imp.pkg.version.protobuf-annotation>[1.0.0-SNAPSHOT,1.1.0)</imp.pkg.version.protobuf-annotation>
+		<imp.pkg.version.protobuf-registry>[1.0.0-SNAPSHOT,1.1.0)</imp.pkg.version.protobuf-registry>
+		<imp.pkg.version.apache.commons.logging>[1.1,2)</imp.pkg.version.apache.commons.logging>
+	</properties>
 
 	<modules>
 		<module>protobuf-annotation</module>

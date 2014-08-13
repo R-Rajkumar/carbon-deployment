@@ -53,27 +53,27 @@
 						<Private-Package>org.wso2.carbon.protobuf.client.internal</Private-Package>
 						<Export-Package>
 							!org.wso2.carbon.protobuf.client.internal,
-							org.wso2.carbon.protobuf.client.*;version="1.0.0"
+							org.wso2.carbon.protobuf.client.*; version="${project.version}"
 						</Export-Package>
 						<Import-Package>
-							com.google.protobuf;version="[2.5,3)",
-							com.googlecode.protobuf.pro.duplex;version="[3.2,4)",
-							com.googlecode.protobuf.pro.duplex.client;version="[3.2,4)",
-							com.googlecode.protobuf.pro.duplex.listener;version="[3.2,4)",
-							com.googlecode.protobuf.pro.duplex.server;version="[3.2,4)",
-							com.googlecode.protobuf.pro.duplex.timeout;version="[3.2,4)",
-							com.googlecode.protobuf.pro.duplex.util;version="[3.2,4)",
-							io.netty.bootstrap;version="[4.0,5)",
-							io.netty.channel;version="[4.0,5)",
-							io.netty.channel.nio;version="[4.0,5)",
-							io.netty.channel.socket.nio;version="[4.0,5)",
-							io.netty.util.concurrent;version="[4.0,5)",
-							org.wso2.carbon.base;version="[1.0,2)",
-							org.slf4j.*;version="[1.7.1, 1.8.0)",
-							org.osgi.framework.*;version="[1.7.0, 1.8.0)",
-							javax.xml.bind.*;version="[0.0.0, 0.1.0)",
-							javax.xml.validation.*;version="[0.0.0, 0.1.0)",
-							javax.xml.transform.*;version="[0.0.0, 0.1.0)",
+							com.google.protobuf; version="${imp.pkg.version.google-protobuf}",
+							com.googlecode.protobuf.pro.duplex; version="${imp.pkg.version.protobuf-rpc-pro}",
+							com.googlecode.protobuf.pro.duplex.client; version="${imp.pkg.version.protobuf-rpc-pro}",
+							com.googlecode.protobuf.pro.duplex.listener; version="${imp.pkg.version.protobuf-rpc-pro}",
+							com.googlecode.protobuf.pro.duplex.server; version="${imp.pkg.version.protobuf-rpc-pro}",
+							com.googlecode.protobuf.pro.duplex.timeout; version="${imp.pkg.version.protobuf-rpc-pro}",
+							com.googlecode.protobuf.pro.duplex.util; version="${imp.pkg.version.protobuf-rpc-pro}",
+							io.netty.bootstrap; version="${imp.pkg.version.netty}",
+							io.netty.channel; version="${imp.pkg.version.netty}",
+							io.netty.channel.nio; version="${imp.pkg.version.netty}",
+							io.netty.channel.socket.nio; version="${imp.pkg.version.netty}",
+							io.netty.util.concurrent; version="${imp.pkg.version.netty}",
+							org.wso2.carbon.base; version="[1.0,2)",
+							org.slf4j.*; version="${imp.pkg.version.slf4j-api}",
+							org.osgi.framework.*; version="${imp.pkg.version.osgi-framework}",
+							javax.xml.bind.*; version="${imp.pkg.version.javax.xml}",
+							javax.xml.validation.*; version="${imp.pkg.version.javax.xml}",
+							javax.xml.transform.*; version="${imp.pkg.version.javax.xml}",
 						</Import-Package>
 					</instructions>
 				</configuration>

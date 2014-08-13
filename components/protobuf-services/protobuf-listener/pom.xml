@@ -78,13 +78,13 @@
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.protobuf.listener.*;version="1.0.0"
+                            org.wso2.carbon.protobuf.listener.*; version="${project.version}"
                         </Export-Package>
                         <Import-Package>
-                            org.wso2.carbon.protobuf.annotation.*;version="[1.0.0,1.1.0)",
-                            org.wso2.carbon.protobuf.registry;version="[1.0.0,1.1.0)",
-                            com.google.protobuf;version="[2.5,3)",
-                            org.apache.commons.logging;version="[1.1,2)",
+                            org.wso2.carbon.protobuf.annotation.*; version="${imp.pkg.version.protobuf-annotation}",
+                            org.wso2.carbon.protobuf.registry; version="${imp.pkg.version.protobuf-registry}",
+                            com.google.protobuf; version="${imp.pkg.version.google-protobuf}",
+                            org.apache.commons.logging; version="${imp.pkg.version.apache.commons.logging}",
                             javax.servlet;version="${imp.pkg.version.javax.servlet}",
                             javax.servlet.http;version="${imp.pkg.version.javax.servlet}",
                             javax.servlet.annotation;version="${imp.pkg.version.javax.servlet}",
