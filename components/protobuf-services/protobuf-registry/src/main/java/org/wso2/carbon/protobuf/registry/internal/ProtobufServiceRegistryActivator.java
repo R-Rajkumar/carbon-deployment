@@ -25,6 +25,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -77,8 +78,6 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 
 	public void start(BundleContext bundleContext) {
 
-		log.info("Starting ProtobufServer...");
-
 		// load protobuf server configurations from pbs xml
 		ProtobufConfiguration configuration = null;
 		try {
@@ -90,11 +89,14 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		}
 
 		if (!configuration.isEnabled()) {
-			log.debug("Protobuf Server is not enabled in pbs xml");
+			log.debug("ProtobufServer is not enabled in pbs xml");
 			return;
 		}
 
+		log.info("Starting ProtobufServer...");
+		
 		// gathering configurations into local variables
+		ServerConfiguration carbonConfig = ServerConfiguration.getInstance();
 		org.wso2.carbon.protobuf.registry.config.ServerConfiguration serverConfig = configuration.getServerConfiguration();
 		ServerCallExecutorThreadPoolConfiguration callExecutorConfig = serverConfig.getServerCallExecutorThreadPoolConfiguration();
 		TimeoutExecutorThreadPoolConfiguration timeoutExecutorConfig = serverConfig.getTimeoutExecutorThreadPoolConfiguration();
@@ -104,25 +106,32 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		AcceptorsConfiguration acceptorsConfig = transportConfig.getAcceptorsConfiguration();
 		ChannelHandlersConfiguration channelHandlersConfig = transportConfig.getChannelHandlersConfiguration();
 		
+		String hostName = carbonConfig.getFirstProperty("HostName");
+		int port = serverConfig.getPort();
+		int portOffset = Integer.parseInt(carbonConfig.getFirstProperty("Ports.Offset"));
+		int effectivePort = port + portOffset;
 		// server information
-		PeerInfo serverInfo = new PeerInfo(serverConfig.getHost(), serverConfig.getPort());
+		PeerInfo serverInfo = new PeerInfo(hostName, effectivePort);
 
+		int callExecutorCorePoolSize = callExecutorConfig.getCorePoolSize();
+		int callExecutorMaxPoolSize = callExecutorConfig.getMaxPoolSize();
+		int callExecutorMaxPoolTimeout = callExecutorConfig.getMaxPoolTimeout();
+		int callExecutorWorkQueueCapacity = callExecutorConfig.getWorkQueueCapacity();
 		// call executor
-		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(
-				callExecutorConfig.getCorePoolSize(), 
-				callExecutorConfig.getMaxPoolSize(), 
-				callExecutorConfig.getMaxPoolTimeout(), 
+		RpcServerCallExecutor callExecutor = new ThreadPoolCallExecutor(
+				callExecutorCorePoolSize, 
+				callExecutorMaxPoolSize, 
+				callExecutorMaxPoolTimeout, 
 				TimeUnit.SECONDS, 
-				new LinkedBlockingQueue<Runnable>(callExecutorConfig.getWorkQueueCapacity()),
+				new LinkedBlockingQueue<Runnable>(callExecutorWorkQueueCapacity),
 				Executors.defaultThreadFactory());
 
 		serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
-		serverFactory.setRpcServerCallExecutor(executor);
+		serverFactory.setRpcServerCallExecutor(callExecutor);
 
 		// if SSL encryption is enabled
 		if (serverConfig.isSSLEnabled()) {
 			//read keystore and truststore from carbon
-			ServerConfiguration carbonConfig = ServerConfiguration.getInstance();
 			String keystorePassword = carbonConfig.getFirstProperty("Security.KeyStore.Password");
 			String keystorePath = carbonConfig.getFirstProperty("Security.KeyStore.Location");
 			String truststorePassword = carbonConfig.getFirstProperty("Security.TrustStore.Password");
@@ -142,18 +151,28 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 			serverFactory.setSslContext(sslCtx);
 		}
 		
+		// Timeout Executor
+		int timeoutExecutorCorePoolSize = timeoutExecutorConfig.getCorePoolSize();
+		int timeoutExecutorMaxPoolSize = timeoutExecutorConfig.getMaxPoolSize();
+		int timeoutExecutorKeepAliveTime = timeoutExecutorConfig.getKeepAliveTime();
+		BlockingQueue<Runnable> timeoutExecutorWorkQueue = new ArrayBlockingQueue<Runnable>(timeoutExecutorCorePoolSize, false);
+		ThreadFactory timeoutExecutorTF = new RenamingThreadFactoryProxy("timeout", Executors.defaultThreadFactory());
 		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(
-				timeoutExecutorConfig.getCorePoolSize(), 
-				timeoutExecutorConfig.getMaxPoolSize(), 
-				timeoutExecutorConfig.getKeepAliveTime(), 
+				timeoutExecutorCorePoolSize, 
+				timeoutExecutorMaxPoolSize, 
+				timeoutExecutorKeepAliveTime, 
 				TimeUnit.SECONDS, 
-				new ArrayBlockingQueue<Runnable>(timeoutCheckerConfig.getCorePoolSize(), false), 
-				new RenamingThreadFactoryProxy("timeout", Executors.defaultThreadFactory()));
+				timeoutExecutorWorkQueue, 
+				timeoutExecutorTF);
 		
+		// Timeout Checker
+		int timeoutCheckerSleepTimeMs = timeoutCheckerConfig.getPeriod();
+		int timeoutCheckerCorePoolSize = timeoutCheckerConfig.getCorePoolSize();
+		ThreadFactory timeoutCheckerTF = new RenamingThreadFactoryProxy("check", Executors.defaultThreadFactory());
 		RpcTimeoutChecker timeoutChecker = new TimeoutChecker(
-				timeoutCheckerConfig.getPeriod(), 
-				timeoutCheckerConfig.getCorePoolSize(), 
-				new RenamingThreadFactoryProxy("check", Executors.defaultThreadFactory()));
+				timeoutCheckerSleepTimeMs, 
+				timeoutCheckerCorePoolSize, 
+				timeoutCheckerTF);
 		timeoutChecker.setTimeoutExecutor(timeoutExecutor);
 		timeoutChecker.startChecking(serverFactory.getRpcClientRegistry());
 		
@@ -198,26 +217,40 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 			serverFactory.setLogger(null);
 		}
 
+		// Call acceptors parameters
+		int acceptorsPoolSize = acceptorsConfig.getPoolSize();
+		int acceptorsSendBufferSize = acceptorsConfig.getSendBufferSize();
+		int acceptorsReceiverBufferSize = acceptorsConfig.getReceiverBufferSize();
+		// Channel handlers parameters
+		int channelHandlersPoolSize = channelHandlersConfig.getPoolSize();
+		int channelHandlersSendBufferSize = channelHandlersConfig.getSendBufferSize();
+		int channelHandlersReceiverBufferSize = channelHandlersConfig.getReceiverBufferSize();
+		// enable nagle's algorithm or not
+		boolean tcpNoDelay = transportConfig.isTCPNoDelay();
+		
+		// boss and worker thread factories
+		ThreadFactory bossTF = new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory());
+		NioEventLoopGroup boss = new NioEventLoopGroup(acceptorsPoolSize, bossTF);
+		ThreadFactory workersTF = new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory());
+		NioEventLoopGroup workers = new NioEventLoopGroup(channelHandlersPoolSize, workersTF);
+		
 		// Configure the server.
 		ServerBootstrap bootstrap = new ServerBootstrap();
-		ThreadFactory bossTF = new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory());
-		NioEventLoopGroup boss = new NioEventLoopGroup(acceptorsConfig.getPoolSize(), bossTF);
-		ThreadFactory workersTF = new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory());
-		NioEventLoopGroup workers = new NioEventLoopGroup(channelHandlersConfig.getPoolSize(), workersTF);
 		bootstrap.group(boss, workers);
 		bootstrap.channel(NioServerSocketChannel.class);
-		bootstrap.option(ChannelOption.SO_SNDBUF, acceptorsConfig.getSendBufferSize());
-		bootstrap.option(ChannelOption.SO_RCVBUF, acceptorsConfig.getReceiverBufferSize());
-		bootstrap.childOption(ChannelOption.SO_RCVBUF, channelHandlersConfig.getReceiverBufferSize());
-		bootstrap.childOption(ChannelOption.SO_SNDBUF, channelHandlersConfig.getSendBufferSize());
-		bootstrap.option(ChannelOption.TCP_NODELAY, transportConfig.isTCPNoDelay());
+		bootstrap.option(ChannelOption.SO_SNDBUF, acceptorsSendBufferSize);
+		bootstrap.option(ChannelOption.SO_RCVBUF, acceptorsReceiverBufferSize);
+		bootstrap.childOption(ChannelOption.SO_RCVBUF, channelHandlersReceiverBufferSize);
+		bootstrap.childOption(ChannelOption.SO_SNDBUF, channelHandlersSendBufferSize);
+		bootstrap.option(ChannelOption.TCP_NODELAY, tcpNoDelay);
 		bootstrap.childHandler(serverFactory);
 		bootstrap.localAddress(serverInfo.getPort());
 
+		// To release resources on shutdown
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
 		shutdownHandler.addResource(boss);
 		shutdownHandler.addResource(workers);
-		shutdownHandler.addResource(executor);
+		shutdownHandler.addResource(callExecutor);
 		shutdownHandler.addResource(timeoutChecker);
 		shutdownHandler.addResource(timeoutExecutor);
 
