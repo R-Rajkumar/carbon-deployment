@@ -19,17 +19,17 @@
 
 package org.wso2.carbon.protobuf.registry.internal;
 
-import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
+import org.wso2.carbon.protobuf.registry.ProtobufRegistry;
 
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
 
-public class ProtobufServiceRegistryImpl implements ProtobufServiceRegistry {
+public class ProtobufRegistryImpl implements ProtobufRegistry {
 	
 	private DuplexTcpServerPipelineFactory serverFactory;
 
-	ProtobufServiceRegistryImpl(DuplexTcpServerPipelineFactory serverFactory) {
+	ProtobufRegistryImpl(DuplexTcpServerPipelineFactory serverFactory) {
 		this.serverFactory = serverFactory;
 	}
 

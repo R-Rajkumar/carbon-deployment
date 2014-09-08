@@ -29,7 +29,7 @@ import org.wso2.carbon.protobuf.annotation.ProtobufService;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServiceData;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServletContextListener;
 import org.wso2.carbon.protobuf.listener.internal.servlet.ProtobufServlet;
-import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
+import org.wso2.carbon.protobuf.registry.ProtobufRegistry;
 
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
@@ -71,8 +71,8 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 
 		for (Class<?> clazz : classes) {
 			// Getting binary service registry
-			ProtobufServiceRegistry binaryServiceRegistry = (ProtobufServiceRegistry) PrivilegedCarbonContext
-					.getThreadLocalCarbonContext().getOSGiService(ProtobufServiceRegistry.class);
+			ProtobufRegistry binaryServiceRegistry = (ProtobufRegistry) PrivilegedCarbonContext
+					.getThreadLocalCarbonContext().getOSGiService(ProtobufRegistry.class);
 			// Is it a blocking service or not
 			boolean blocking = clazz.getAnnotation(ProtobufService.class).blocking();
 			Method reflectiveMethod = null;
@@ -119,16 +119,16 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 				}
 			} catch (InvocationTargetException e) {
 				String msg = "InvocationTargetException" + e.getLocalizedMessage();
-				log.info(msg);
+				log.info(msg, e);
 			} catch (NoSuchMethodException e) {
 				String msg = "NoSuchMethodException" + e.getLocalizedMessage();
-				log.info(msg);
+				log.info(msg, e);
 			} catch (InstantiationException e) {
 				String msg = "InstantiationException" + e.getLocalizedMessage();
-				log.info(msg);
+				log.info(msg, e);
 			} catch (IllegalAccessException e) {
 				String msg = "IllegalAccessException" + e.getLocalizedMessage();
-				log.info(msg);
+				log.info(msg, e);
 			}
 		}
 	}

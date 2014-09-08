@@ -28,7 +28,7 @@ import com.google.protobuf.Service;
  * Any class can get an instance of this class from OSGI run time and use it to
  * register/remove services
  */
-public interface ProtobufServiceRegistry {
+public interface ProtobufRegistry {
 	public String registerBlockingService(BlockingService blockingService);
 	public String registerService(Service service);
 	public String removeBlockingService(String serviceName);

@@ -36,7 +36,7 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.base.ServerConfiguration;
-import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
+import org.wso2.carbon.protobuf.registry.ProtobufRegistry;
 import org.wso2.carbon.protobuf.registry.config.AcceptorsConfiguration;
 import org.wso2.carbon.protobuf.registry.config.ChannelHandlersConfiguration;
 import org.wso2.carbon.protobuf.registry.config.LoggerConfiguration;
@@ -71,9 +71,9 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * It reads configuration information from pbs xml which should be placed
  * inside AS's components/repository/lib directory.
  */
-public class ProtobufServiceRegistryActivator implements BundleActivator {
+public class ProtobufRegistryActivator implements BundleActivator {
 
-	private static final Logger log = LoggerFactory.getLogger(ProtobufServiceRegistry.class);
+	private static final Logger log = LoggerFactory.getLogger(ProtobufRegistry.class);
 	private DuplexTcpServerPipelineFactory serverFactory;
 
 	public void start(BundleContext bundleContext) {
@@ -258,8 +258,8 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		bootstrap.bind();
 		log.info("ProtobufServer Serving " + serverInfo);
 		// Register ProtobufServer Registry as an OSGi service
-		ProtobufServiceRegistry pbsRegistry = new ProtobufServiceRegistryImpl(serverFactory);
-		bundleContext.registerService(ProtobufServiceRegistry.class.getName(), pbsRegistry, null);
+		ProtobufRegistry pbsRegistry = new ProtobufRegistryImpl(serverFactory);
+		bundleContext.registerService(ProtobufRegistry.class.getName(), pbsRegistry, null);
 	}
 
 	public void stop(BundleContext bundleContext) {

@@ -9,14 +9,16 @@
 	
 	<Server>		 
 		<!--
-		 * Details of the RPC binary server
+		  Details of the RPC binary server
+		  HostName will be taken from carbon.xml
+		  If port offset is set in carbon.xml, effective port will be Port + Offset
 		-->
 	 	<Host>localhost</Host>
 	   	<Port>9001</Port>
 
 		<!--
 			SSL configuration
-			If true keystore and truststore information will be retrieved from carbon
+			If true keystore and truststore information will be taken from carbon.xml
 		-->		
 	 	<EnableSSL>false</EnableSSL>
 
