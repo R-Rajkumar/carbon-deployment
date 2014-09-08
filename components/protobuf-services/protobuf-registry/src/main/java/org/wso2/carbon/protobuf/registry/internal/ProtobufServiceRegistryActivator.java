@@ -24,8 +24,10 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleActivator;
@@ -34,8 +36,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.protobuf.registry.ProtobufServiceRegistry;
+import org.wso2.carbon.protobuf.registry.config.AcceptorsConfiguration;
+import org.wso2.carbon.protobuf.registry.config.ChannelHandlersConfiguration;
+import org.wso2.carbon.protobuf.registry.config.LoggerConfiguration;
 import org.wso2.carbon.protobuf.registry.config.ProtobufConfigFactory;
 import org.wso2.carbon.protobuf.registry.config.ProtobufConfiguration;
+import org.wso2.carbon.protobuf.registry.config.ServerCallExecutorThreadPoolConfiguration;
+import org.wso2.carbon.protobuf.registry.config.TimeoutCheckerThreadPoolConfiguration;
+import org.wso2.carbon.protobuf.registry.config.TimeoutExecutorThreadPoolConfiguration;
+import org.wso2.carbon.protobuf.registry.config.TransportConfiguration;
 import org.wso2.carbon.protobuf.registry.config.exception.ProtobufConfigurationException;
 
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
@@ -63,12 +72,12 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  */
 public class ProtobufServiceRegistryActivator implements BundleActivator {
 
-	private static Logger log = LoggerFactory.getLogger(ProtobufServiceRegistry.class);
-	static DuplexTcpServerPipelineFactory serverFactory;
+	private static final Logger log = LoggerFactory.getLogger(ProtobufServiceRegistry.class);
+	private DuplexTcpServerPipelineFactory serverFactory;
 
 	public void start(BundleContext bundleContext) {
 
-		log.info("Starting Protobuf Server...");
+		log.info("Starting ProtobufServer...");
 
 		// load protobuf server configurations from pbs xml
 		ProtobufConfiguration configuration = null;
@@ -76,7 +85,7 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 			configuration = ProtobufConfigFactory.build();
 		} catch (ProtobufConfigurationException e) {
 			String msg = "Error while loading pbs xml file " + e.getLocalizedMessage();
-			log.debug(msg);
+			log.error(msg ,e);
 			return;
 		}
 
@@ -85,53 +94,69 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 			return;
 		}
 
+		// gathering configurations into local variables
+		org.wso2.carbon.protobuf.registry.config.ServerConfiguration serverConfig = configuration.getServerConfiguration();
+		ServerCallExecutorThreadPoolConfiguration callExecutorConfig = serverConfig.getServerCallExecutorThreadPoolConfiguration();
+		TimeoutExecutorThreadPoolConfiguration timeoutExecutorConfig = serverConfig.getTimeoutExecutorThreadPoolConfiguration();
+		TimeoutCheckerThreadPoolConfiguration timeoutCheckerConfig = serverConfig.getTimeoutCheckerThreadPoolConfiguration();
+		LoggerConfiguration loggerConfig = serverConfig.getLoggerConfiguration();
+		TransportConfiguration transportConfig = configuration.getTransportConfiguration();
+		AcceptorsConfiguration acceptorsConfig = transportConfig.getAcceptorsConfiguration();
+		ChannelHandlersConfiguration channelHandlersConfig = transportConfig.getChannelHandlersConfiguration();
+		
 		// server information
-		PeerInfo serverInfo = new PeerInfo(configuration.getServerConfiguration().getHost(),
-				configuration.getServerConfiguration().getPort());
+		PeerInfo serverInfo = new PeerInfo(serverConfig.getHost(), serverConfig.getPort());
 
 		// call executor
-		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(configuration
-				.getServerConfiguration().getServerCallExecutorThreadPoolConfiguration()
-				.getCorePoolSize(), configuration.getServerConfiguration()
-				.getServerCallExecutorThreadPoolConfiguration().getMaxPoolSize(), configuration
-				.getServerConfiguration().getServerCallExecutorThreadPoolConfiguration()
-				.getMaxPoolTimeout(), TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(
-				configuration.getServerConfiguration()
-						.getServerCallExecutorThreadPoolConfiguration().getWorkQueueCapacity()),
+		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(
+				callExecutorConfig.getCorePoolSize(), 
+				callExecutorConfig.getMaxPoolSize(), 
+				callExecutorConfig.getMaxPoolTimeout(), 
+				TimeUnit.SECONDS, 
+				new LinkedBlockingQueue<Runnable>(callExecutorConfig.getWorkQueueCapacity()),
 				Executors.defaultThreadFactory());
 
 		serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
 		serverFactory.setRpcServerCallExecutor(executor);
 
 		// if SSL encryption is enabled
-		if (configuration.getServerConfiguration().isSSLEnabled()) {
-			ServerConfiguration carbonServerConfiguration = ServerConfiguration.getInstance();
+		if (serverConfig.isSSLEnabled()) {
+			//read keystore and truststore from carbon
+			ServerConfiguration carbonConfig = ServerConfiguration.getInstance();
+			String keystorePassword = carbonConfig.getFirstProperty("Security.KeyStore.Password");
+			String keystorePath = carbonConfig.getFirstProperty("Security.KeyStore.Location");
+			String truststorePassword = carbonConfig.getFirstProperty("Security.TrustStore.Password");
+			String truststorePath = carbonConfig.getFirstProperty("Security.TrustStore.Location");
 			RpcSSLContext sslCtx = new RpcSSLContext();
-			sslCtx.setKeystorePassword(carbonServerConfiguration
-					.getFirstProperty("Security.KeyStore.Password"));
-			sslCtx.setKeystorePath(carbonServerConfiguration
-					.getFirstProperty("Security.KeyStore.Location"));
-			sslCtx.setTruststorePassword(carbonServerConfiguration
-					.getFirstProperty("Security.TrustStore.Password"));
-			sslCtx.setTruststorePath(carbonServerConfiguration
-					.getFirstProperty("Security.TrustStore.Location"));
-
+			sslCtx.setKeystorePassword(keystorePassword);
+			sslCtx.setKeystorePath(keystorePath);
+			sslCtx.setTruststorePassword(truststorePassword);
+			sslCtx.setTruststorePath(truststorePath);
 			try {
 				sslCtx.init();
 			} catch (Exception e) {
-				log.error("Couldn't create SSL Context : " + e.getLocalizedMessage());
+				String msg = "Couldn't create SSL Context : " + e.getLocalizedMessage();
+				log.error(msg, e);
+				return;
 			}
 			serverFactory.setSslContext(sslCtx);
 		}
-
-		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(configuration
-				.getServerConfiguration().getTimeoutExecutorThreadPoolConfiguration()
-				.getCorePoolSize(), configuration.getServerConfiguration()
-				.getTimeoutExecutorThreadPoolConfiguration().getMaxPoolSize());
-		RpcTimeoutChecker timeoutChecker = new TimeoutChecker();
+		
+		RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(
+				timeoutExecutorConfig.getCorePoolSize(), 
+				timeoutExecutorConfig.getMaxPoolSize(), 
+				timeoutExecutorConfig.getKeepAliveTime(), 
+				TimeUnit.SECONDS, 
+				new ArrayBlockingQueue<Runnable>(timeoutCheckerConfig.getCorePoolSize(), false), 
+				new RenamingThreadFactoryProxy("timeout", Executors.defaultThreadFactory()));
+		
+		RpcTimeoutChecker timeoutChecker = new TimeoutChecker(
+				timeoutCheckerConfig.getPeriod(), 
+				timeoutCheckerConfig.getCorePoolSize(), 
+				new RenamingThreadFactoryProxy("check", Executors.defaultThreadFactory()));
 		timeoutChecker.setTimeoutExecutor(timeoutExecutor);
 		timeoutChecker.startChecking(serverFactory.getRpcClientRegistry());
-
+		
 		// setup a RPC event listener - it just logs what happens
 		RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
 		RpcConnectionEventListener listener = new RpcConnectionEventListener() {
@@ -158,45 +183,34 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 		rpcEventNotifier.setEventListener(listener);
 		serverFactory.registerConnectionEventListener(rpcEventNotifier);
 
-		// Binary Services Server Logger
+		// ProtobufServer Logger
+		boolean isLogReq = loggerConfig.isLogReqProtoEnabled();
+		boolean isLogRes = loggerConfig.isLogResProtoEnabled();
+		boolean isLogEve = loggerConfig.isLogEventProtoEnabled();
 		CategoryPerServiceLogger logger = new CategoryPerServiceLogger();
-		logger.setLogRequestProto(configuration.getServerConfiguration().getLoggerConfiguration()
-				.isLogReqProtoEnabled());
-		logger.setLogResponseProto(configuration.getServerConfiguration().getLoggerConfiguration()
-				.isLogResProtoEnabled());
-		logger.setLogEventProto(configuration.getServerConfiguration().getLoggerConfiguration()
-				.isLogEventProtoEnabled());
-
-		if (!configuration.getServerConfiguration().getLoggerConfiguration().isLogReqProtoEnabled()
-				&& !configuration.getServerConfiguration().getLoggerConfiguration()
-						.isLogResProtoEnabled()
-				&& !configuration.getServerConfiguration().getLoggerConfiguration()
-						.isLogEventProtoEnabled()) {
-			serverFactory.setLogger(null);
-		} else {
+		logger.setLogRequestProto(isLogReq);
+		logger.setLogResponseProto(isLogRes);
+		logger.setLogEventProto(isLogEve);
+		
+		if(isLogReq || isLogRes || isLogEve) {
 			serverFactory.setLogger(logger);
+		} else {
+			serverFactory.setLogger(null);
 		}
 
 		// Configure the server.
 		ServerBootstrap bootstrap = new ServerBootstrap();
-		NioEventLoopGroup boss = new NioEventLoopGroup(configuration.getTransportConfiguration()
-				.getAcceptorsConfiguration().getPoolSize(), new RenamingThreadFactoryProxy("boss",
-				Executors.defaultThreadFactory()));
-		NioEventLoopGroup workers = new NioEventLoopGroup(configuration.getTransportConfiguration()
-				.getChannelHandlersConfiguration().getPoolSize(), new RenamingThreadFactoryProxy(
-				"worker", Executors.defaultThreadFactory()));
+		ThreadFactory bossTF = new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory());
+		NioEventLoopGroup boss = new NioEventLoopGroup(acceptorsConfig.getPoolSize(), bossTF);
+		ThreadFactory workersTF = new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory());
+		NioEventLoopGroup workers = new NioEventLoopGroup(channelHandlersConfig.getPoolSize(), workersTF);
 		bootstrap.group(boss, workers);
 		bootstrap.channel(NioServerSocketChannel.class);
-		bootstrap.option(ChannelOption.SO_SNDBUF, configuration.getTransportConfiguration()
-				.getAcceptorsConfiguration().getSendBufferSize());
-		bootstrap.option(ChannelOption.SO_RCVBUF, configuration.getTransportConfiguration()
-				.getAcceptorsConfiguration().getReceiverBufferSize());
-		bootstrap.childOption(ChannelOption.SO_RCVBUF, configuration.getTransportConfiguration()
-				.getChannelHandlersConfiguration().getReceiverBufferSize());
-		bootstrap.childOption(ChannelOption.SO_SNDBUF, configuration.getTransportConfiguration()
-				.getChannelHandlersConfiguration().getSendBufferSize());
-		bootstrap.option(ChannelOption.TCP_NODELAY, configuration.getTransportConfiguration()
-				.isTCPNoDelay());
+		bootstrap.option(ChannelOption.SO_SNDBUF, acceptorsConfig.getSendBufferSize());
+		bootstrap.option(ChannelOption.SO_RCVBUF, acceptorsConfig.getReceiverBufferSize());
+		bootstrap.childOption(ChannelOption.SO_RCVBUF, channelHandlersConfig.getReceiverBufferSize());
+		bootstrap.childOption(ChannelOption.SO_SNDBUF, channelHandlersConfig.getSendBufferSize());
+		bootstrap.option(ChannelOption.TCP_NODELAY, transportConfig.isTCPNoDelay());
 		bootstrap.childHandler(serverFactory);
 		bootstrap.localAddress(serverInfo.getPort());
 
@@ -209,15 +223,13 @@ public class ProtobufServiceRegistryActivator implements BundleActivator {
 
 		// Bind and start to accept incoming connections.
 		bootstrap.bind();
-		log.info("Serving " + serverInfo);
-		// Register Binary Service Registry as an OSGi service
-		ProtobufServiceRegistry protobufServiceRegistry = new ProtobufServiceRegistryImpl(
-				serverFactory);
-		bundleContext.registerService(ProtobufServiceRegistry.class.getName(),
-				protobufServiceRegistry, null);
+		log.info("ProtobufServer Serving " + serverInfo);
+		// Register ProtobufServer Registry as an OSGi service
+		ProtobufServiceRegistry pbsRegistry = new ProtobufServiceRegistryImpl(serverFactory);
+		bundleContext.registerService(ProtobufServiceRegistry.class.getName(), pbsRegistry, null);
 	}
 
 	public void stop(BundleContext bundleContext) {
-		log.info("Protobuf Server Shutting Down...");
+		log.info("Shutting down ProtobufServer...");
 	}
 }

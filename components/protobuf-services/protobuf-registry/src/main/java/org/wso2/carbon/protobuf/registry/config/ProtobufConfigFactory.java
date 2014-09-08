@@ -35,10 +35,15 @@ public class ProtobufConfigFactory {
 
 	public static ProtobufConfiguration build() throws ProtobufConfigurationException {
 
-		ProtobufConfiguration protobufConfiguration = null;
+		ProtobufConfiguration protobufConfig = null;
 		
 		try {
-			String pbsXmlLocation = System.getProperty(CarbonBaseConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+File.separator+"etc"+File.separator+"pbs.xml";
+			String pbsXmlLocation = System.getProperty(
+					CarbonBaseConstants.CARBON_HOME)+
+					File.separator+"repository"+
+					File.separator+"conf"+
+					File.separator+"etc"+
+					File.separator+"pbs.xml";
 			File file = new File(pbsXmlLocation);
 			JAXBContext context = JAXBContext.newInstance(ProtobufConfiguration.class);
             // validate pbs.xml using the schema
@@ -48,14 +53,14 @@ public class ProtobufConfigFactory {
             Schema schema = sf.newSchema(streamSource);
 			Unmarshaller un = context.createUnmarshaller();
             un.setSchema(schema);
-			protobufConfiguration = (ProtobufConfiguration) un.unmarshal(file);
+			protobufConfig = (ProtobufConfiguration) un.unmarshal(file);
 		} catch (Exception e) {
 			String msg = "Error while loading cluster configuration file";
 			System.out.println(e);
 			throw new ProtobufConfigurationException(msg, e);
 		}
 		
-		return protobufConfiguration;
+		return protobufConfig;
 	}
 
 }

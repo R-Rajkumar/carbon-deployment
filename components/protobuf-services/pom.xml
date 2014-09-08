@@ -44,8 +44,6 @@
 		<module>protobuf-annotation</module>
 		<module>protobuf-registry</module>
 		<module>protobuf-listener</module>
-		<module>protobuf-client</module>
-		<module>protobuf-esb-mediator</module>
 	</modules>
 
 </project>
