@@ -77,6 +77,8 @@ public class ProtobufRegistryActivator implements BundleActivator {
 	private DuplexTcpServerPipelineFactory serverFactory;
 
 	public void start(BundleContext bundleContext) {
+		
+		log.info("/////////////////////////////////////");
 
 		// load protobuf server configurations from pbs xml
 		ProtobufConfiguration configuration = null;
