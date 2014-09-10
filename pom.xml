@@ -15,12 +15,11 @@
         <module>service-stubs/webapp-mgt</module>
         <module>components/service-mgt</module>
         <module>components/webapp-mgt</module>
-        <module>components/protobuf-services</module>
+        <module>components/javaee</module>
         <module>features/as-runtimes</module>
         <module>features/service-mgt</module>
         <module>features/webapp-mgt</module>
-        <module>features/netty</module>
-        <module>features/protobuf-services</module>
+        <module>features/javaee</module>
     </modules>
 
     <dependencyManagement>
@@ -833,66 +832,11 @@
                 <version>${carbon.platform.version}</version>
             </dependency>
 
-
-            <!--protobuf services dependencies-->
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.protobuf.annotation</artifactId>
-                <version>${protobuf.service.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.protobuf.listener</artifactId>
-                <version>${protobuf.service.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>${google.protobuf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.protobuf.registry</artifactId>
-                <version>${protobuf.service.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.googlecode.protobuf-rpc-pro</groupId>
-                <artifactId>protobuf-rpc-pro-duplex</artifactId>
-                <version>${protobuf-rpc-pro-duplex.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-transport</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-common</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-handler</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-buffer</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j-api.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <!--end of protobuf services dependencies-->
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+            <version>${eclipse.osgi.version}</version>
+        </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -1059,6 +1003,7 @@
     </profiles>
 
     <properties>
+        <carbon.deployment.version>4.3.0-SNAPSHOT</carbon.deployment.version>
         <previous.version>4.2.0</previous.version>
         <version.jettison>1.3.4</version.jettison>
         <wso2carbon.version>4.3.0-SNAPSHOT</wso2carbon.version>
@@ -1078,6 +1023,8 @@
 
         <version.tomcat>7.0.52</version.tomcat>
         <orbit.version.tomcat>${version.tomcat}.wso2v3</orbit.version.tomcat>
+
+        <eclipse.osgi.version>3.8.0.v20120529-1548</eclipse.osgi.version>
 
         <!-- Stratos Version -->
         <stratos.version>2.3.0-SNAPSHOT</stratos.version>
@@ -1177,8 +1124,8 @@
         <jetty.version>6.1.5</jetty.version>
         <orbit.version.infinispan>5.1.2.wso2v1</orbit.version.infinispan>
         <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
-        <orbit.version.spring>3.1.0.wso2v1</orbit.version.spring>
-        <imp.pkg.version.spring>[3.1.0.wso2v1, 3.2.0)</imp.pkg.version.spring>
+        <orbit.version.spring>3.2.9.wso2v1</orbit.version.spring>
+        <imp.pkg.version.spring>[3.2.9.wso2v1, 3.3.0)</imp.pkg.version.spring>
 
         <orbit.version.commons.fileuploader>1.2.0.wso2v1</orbit.version.commons.fileuploader>
         <orbit.version.woden>1.0.0.M8-wso2v1</orbit.version.woden>
