@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ProtobufConfig xsi:schemaLocation="http://wso2.com/schema/protobuf/config pbs.xsd"
+<ProtobufConfig xsi:schemaLocation="http://wso2.com/schema/protobuf/config protobuf-server.xsd"
          xmlns="http://wso2.com/schema/protobuf/config"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -9,14 +9,15 @@
 	
 	<Server>		 
 		<!--
-		 * Details of the RPC binary server
+		  Details of the RPC binary server
+		  HostName will be taken from carbon.xml
+		  If port offset is set in carbon.xml, effective port will be Port + Offset
 		-->
-	 	<Host>localhost</Host>
 	   	<Port>9001</Port>
 
 		<!--
 			SSL configuration
-			If true keystore and truststore information will be retrieved from carbon
+			If true keystore and truststore information will be taken from carbon.xml
 		-->		
 	 	<EnableSSL>false</EnableSSL>
 
@@ -30,6 +31,7 @@
 			<CorePoolSize>16</CorePoolSize>
 			<MaxPoolSize>200</MaxPoolSize>
 			<MaxPoolTimeout>30</MaxPoolTimeout>
+			<WorkQueueCapacity>1000</WorkQueueCapacity>
 		</ServerCallExecutorThreadPool>
 
 		<!--
@@ -46,7 +48,7 @@
 		</TimeoutExecutorThreadPool>
 		
 		<!--
-		 TimeoutChecker Monitors all RPC client and server calls for all RpcChannels
+		 TimeoutChecker monitors all RPC client and server calls for all RpcChannels
 		 timeoutCheckerThreadPool contains configuration of timeoutchecker
 		 corePoolSize - the number of threads to keep in the pool, even if they are idle
 		 periodMs - Time period in MILLISECONDS, to monitor (check timeouts) periodically (this timeout check process
@@ -57,6 +59,9 @@
 			<Period>1000</Period>
 		</TimeoutCheckerThreadPool>
 
+		<!-- 
+		 Logging level
+	    -->
 		<Logger>
 			<LogReqProto>false</LogReqProto>
 			<LogResProto>false</LogResProto>
