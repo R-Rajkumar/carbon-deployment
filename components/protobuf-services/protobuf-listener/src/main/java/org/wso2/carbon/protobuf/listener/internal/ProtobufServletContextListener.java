@@ -28,10 +28,11 @@ import javax.servlet.ServletContextListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /*
- * This class will remove services from Binary Services Registry when PB wars
- * are undeployed.
+ * This class will remove services from Protobuf Services Registry 
+ * when protobuf service wars are undeployed.
  */
 public class ProtobufServletContextListener implements ServletContextListener {
 	@Override
@@ -43,24 +44,24 @@ public class ProtobufServletContextListener implements ServletContextListener {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
 		// getting Binary Service Registry from OSGI run time
-		ProtobufRegistry binaryServiceRegistry = (ProtobufRegistry) PrivilegedCarbonContext
+		ProtobufRegistry protobufRegistry = (ProtobufRegistry) PrivilegedCarbonContext
 				.getThreadLocalCarbonContext().getOSGiService(ProtobufRegistry.class);
 		// getting all the services for the corresponding servlet context
 		// Please note that, a PB war can contain many PB services
 		// Therefore we should remove all of them when the war is undeployed
-		ArrayList<ProtobufServiceData> serviceList = ((ArrayList<ProtobufServiceData>) servletContext
+		List<ProtobufServiceData> serviceList = ((ArrayList<ProtobufServiceData>) servletContext
 				.getAttribute("services"));
 
 		for (Iterator<ProtobufServiceData> iterator = serviceList.iterator(); iterator.hasNext();) {
 			// getting service information from PBService bean
 			ProtobufServiceData pbService = iterator.next();
 			String serviceName = pbService.getServiceName();
-			String serviceType = pbService.getServiceType();
+			ServiceType serviceType = pbService.getServiceType();
 			// if PB service is a blocking service
-			if (serviceType.equals("BlockingService")) {
-				binaryServiceRegistry.removeBlockingService(serviceName);
-			} else if (serviceType.equals("NonBlockingService")) {
-				binaryServiceRegistry.removeService(serviceName);
+			if (serviceType == ServiceType.Blocking) {
+				protobufRegistry.removeBlockingService(serviceName);
+			} else if (serviceType == ServiceType.NonBlocking) {
+				protobufRegistry.removeService(serviceName);
 			}
 		}
 	}

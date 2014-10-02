@@ -23,35 +23,35 @@ import org.wso2.carbon.protobuf.registry.ProtobufRegistry;
 
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
-import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
+import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
 
 public class ProtobufRegistryImpl implements ProtobufRegistry {
 	
-	private DuplexTcpServerPipelineFactory serverFactory;
+	private RpcServiceRegistry rpcServiceRegistry;
 
-	ProtobufRegistryImpl(DuplexTcpServerPipelineFactory serverFactory) {
-		this.serverFactory = serverFactory;
+	ProtobufRegistryImpl(RpcServiceRegistry rpcServiceRegistry) {
+		this.rpcServiceRegistry = rpcServiceRegistry;
 	}
 
-	public String registerBlockingService(BlockingService blockingService) {
-		serverFactory.getRpcServiceRegistry().registerService(blockingService);
-		return blockingService.getDescriptorForType().getFullName();
+	@Override
+	public void registerBlockingService(BlockingService blockingService) {
+		rpcServiceRegistry.registerService(blockingService);
 	}
 
-	public String registerService(Service service) {
-		serverFactory.getRpcServiceRegistry().registerService(service);
-		return service.getDescriptorForType().getFullName();
+	@Override
+	public void registerService(Service service) {
+		rpcServiceRegistry.registerService(service);
 	}
 
-	public String removeBlockingService(String serviceName) {
-		BlockingService blockingService = serverFactory.getRpcServiceRegistry().resolveService(serviceName).getBlockingService();
-		serverFactory.getRpcServiceRegistry().removeService(blockingService);
-		return blockingService.getDescriptorForType().getFullName();
+	@Override
+	public void removeBlockingService(String serviceName) {
+		BlockingService blockingService = rpcServiceRegistry.resolveService(serviceName).getBlockingService();
+		rpcServiceRegistry.removeService(blockingService);
 	}
 
-	public String removeService(String serviceName) {
-		Service service = serverFactory.getRpcServiceRegistry().resolveService(serviceName).getService();
-		serverFactory.getRpcServiceRegistry().removeService(service);
-		return service.getDescriptorForType().getFullName();
+	@Override
+	public void removeService(String serviceName) {
+		Service service = rpcServiceRegistry.resolveService(serviceName).getService();
+		rpcServiceRegistry.removeService(service);
 	}
 }

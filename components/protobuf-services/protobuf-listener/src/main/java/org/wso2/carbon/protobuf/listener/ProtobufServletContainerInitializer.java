@@ -28,6 +28,7 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.protobuf.annotation.ProtobufService;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServiceData;
 import org.wso2.carbon.protobuf.listener.internal.ProtobufServletContextListener;
+import org.wso2.carbon.protobuf.listener.internal.ServiceType;
 import org.wso2.carbon.protobuf.listener.internal.servlet.ProtobufServlet;
 import org.wso2.carbon.protobuf.registry.ProtobufRegistry;
 
@@ -78,7 +79,7 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 			Method reflectiveMethod = null;
 			Object serviceObj = null;
 			String serviceName;
-			String serviceType;
+			ServiceType serviceType;
 			try {
 				if (blocking) {
 					// getting newReflectiveBlocking method which will return a
@@ -89,8 +90,9 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 					serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
 					BlockingService blockingService = (BlockingService) serviceObj;
 					// register service into Binary Service Registry
-					serviceName = binaryServiceRegistry.registerBlockingService(blockingService);
-					serviceType = "BlockingService";
+					binaryServiceRegistry.registerBlockingService(blockingService);
+					serviceName = blockingService.getDescriptorForType().getFullName();
+					serviceType = ServiceType.Blocking;
 					// keeps PB service information in a bean
 					// we need these when removing the services from Binary
 					// Service Registry
@@ -105,10 +107,11 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 							"newReflectiveService", clazz.getInterfaces()[0]);
 					// Since it is a static method, we pass null
 					serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
-					Service service = (Service) serviceObj;
+					Service nonBlockingService = (Service) serviceObj;
 					// register service into Binary Service Registry
-					serviceName = binaryServiceRegistry.registerService(service);
-					serviceType = "NonBlockingService";
+					binaryServiceRegistry.registerService(nonBlockingService);
+					serviceName = nonBlockingService.getDescriptorForType().getFullName();
+					serviceType = ServiceType.NonBlocking;
 					// keeps PB service information in a bean
 					// we need these information to remove the service from
 					// Binary Service Registry later

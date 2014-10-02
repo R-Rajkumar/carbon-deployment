@@ -68,7 +68,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * This class starts an RPC server and register its registry as an OSGI service
  * for binary services.
  * 
- * It reads configuration information from pbs xml which should be placed
+ * It reads configuration information from protobuf-server xml which is placed
  * inside AS's components/repository/lib directory.
  */
 public class ProtobufRegistryActivator implements BundleActivator {
@@ -78,20 +78,18 @@ public class ProtobufRegistryActivator implements BundleActivator {
 
 	public void start(BundleContext bundleContext) {
 		
-		log.info("/////////////////////////////////////");
-
 		// load protobuf server configurations from pbs xml
 		ProtobufConfiguration configuration = null;
 		try {
 			configuration = ProtobufConfigFactory.build();
 		} catch (ProtobufConfigurationException e) {
-			String msg = "Error while loading pbs xml file " + e.getLocalizedMessage();
+			String msg = "Error while loading protobuf-server xml file " + e.getLocalizedMessage();
 			log.error(msg ,e);
 			return;
 		}
 
 		if (!configuration.isEnabled()) {
-			log.debug("ProtobufServer is not enabled in pbs xml");
+			log.debug("ProtobufServer is not enabled in protobuf-server xml");
 			return;
 		}
 
@@ -260,7 +258,7 @@ public class ProtobufRegistryActivator implements BundleActivator {
 		bootstrap.bind();
 		log.info("ProtobufServer Serving " + serverInfo);
 		// Register ProtobufServer Registry as an OSGi service
-		ProtobufRegistry pbsRegistry = new ProtobufRegistryImpl(serverFactory);
+		ProtobufRegistry pbsRegistry = new ProtobufRegistryImpl(serverFactory.getRpcServiceRegistry());
 		bundleContext.registerService(ProtobufRegistry.class.getName(), pbsRegistry, null);
 	}
 

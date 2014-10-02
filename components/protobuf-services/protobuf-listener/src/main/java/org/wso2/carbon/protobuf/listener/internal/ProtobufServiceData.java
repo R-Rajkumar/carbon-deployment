@@ -29,9 +29,9 @@ package org.wso2.carbon.protobuf.listener.internal;
  */
 public class ProtobufServiceData {
 	private String serviceName;
-	private String serviceType;
+	private ServiceType serviceType;
 
-	public ProtobufServiceData(String serviceName, String serviceType) {
+	public ProtobufServiceData(String serviceName, ServiceType serviceType) {
 		this.serviceName = serviceName;
 		this.serviceType = serviceType;
 	}
@@ -40,7 +40,7 @@ public class ProtobufServiceData {
 		return serviceName;
 	}
 
-	protected String getServiceType() {
+	protected ServiceType getServiceType() {
 		return serviceType;
 	}
 }

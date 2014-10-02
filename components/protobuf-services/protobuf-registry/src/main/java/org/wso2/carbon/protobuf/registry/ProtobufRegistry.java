@@ -23,14 +23,27 @@ import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 
 /*
- * It provides APIs to register and remove services to/from Protobuf Service Registry.
+ * It provides APIs to register and remove blocking/non-blocking services to/from Protobuf Service Registry.
  * 
  * Any class can get an instance of this class from OSGI run time and use it to
  * register/remove services
  */
 public interface ProtobufRegistry {
-	public String registerBlockingService(BlockingService blockingService);
-	public String registerService(Service service);
-	public String removeBlockingService(String serviceName);
-	public String removeService(String serviceName);
+	
+	/**
+	 * @param blockingService - an instance of a class which implements {@link BlockingService}
+	 */
+	public void registerBlockingService(BlockingService blockingService);
+	/**
+	 * @param service - an instance of a class which implements {@link Service}
+	 */
+	public void registerService(Service service);
+	/**
+	 * @param serviceName - service name to be removed
+	 */
+	public void removeBlockingService(String serviceName);
+	/**
+	 * @param serviceName - service name to be removed
+	 */
+	public void removeService(String serviceName);
 }
