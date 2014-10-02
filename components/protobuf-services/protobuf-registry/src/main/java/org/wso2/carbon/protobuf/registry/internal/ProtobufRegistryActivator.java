@@ -89,7 +89,9 @@ public class ProtobufRegistryActivator implements BundleActivator {
 		}
 
 		if (!configuration.isEnabled()) {
-			log.debug("ProtobufServer is not enabled in protobuf-server xml");
+			if (log.isDebugEnabled()) {
+				log.debug("ProtobufServer is not enabled in protobuf-server xml");
+			}
 			return;
 		}
 
