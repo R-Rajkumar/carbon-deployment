@@ -28,6 +28,8 @@ public class LoaderConstants {
     public final static String SYSTEM_ENV = "Carbon";
     public final static String TOMCAT_ENV = "Tomcat";
     public final static String CXF_ENV = "CXF";
+    public final static String JAVAEE_ENV = "Javaee";
+
 
     //TODO add all the XML element names as constants.
 }

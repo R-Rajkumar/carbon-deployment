@@ -23,6 +23,7 @@ import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.core.transports.http.HttpTransportListener;
+import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.NetworkUtils;
 
 import java.io.File;
@@ -106,13 +107,22 @@ public final class Utils {
         if (!isServletTransport(axisConfig)) {
             int tenantIndex = tryitPrefix.indexOf("/t/");
             if (tenantIndex != -1) {
-                tryitPrefix = tryitPrefix.substring(
-                        tryitPrefix.substring(0, tryitPrefix.indexOf("/t/")).lastIndexOf("/"));
+                String tmpTryitPrefix = tryitPrefix.substring(
+                        tryitPrefix.substring(0, tryitPrefix.indexOf("/t/")).lastIndexOf("/"));  
+                //Check if the  Webapp context root of WSO2 Carbon is set.
+                tryitPrefix = tryitPrefix.replaceFirst("//", "");
+                if(tryitPrefix.substring(0, tryitPrefix.indexOf("/services/")).lastIndexOf("/") > -1){
+                    tryitPrefix = tryitPrefix.substring(
+                            tryitPrefix.substring(0, tryitPrefix.indexOf("/services/")).lastIndexOf("/"));                
+                }else{
+                	tryitPrefix = tmpTryitPrefix;	
+                }
+                
             } else {
                 tryitPrefix = configurationContext.getServiceContextPath() + "/";
             }
         }
-        return tryitPrefix + serviceName + "?tryit";
+        return CarbonUtils.getProxyContextPath(false) + tryitPrefix + serviceName + "?tryit";
     }
 
     /**
