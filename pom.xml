@@ -17,11 +17,14 @@
         <module>components/webapp-mgt</module>
         <module>components/javaee</module>
         <module>components/monitoring</module>
+	<module>components/protobuf-services</module>
         <module>features/as-runtimes</module>
         <module>features/service-mgt</module>
         <module>features/webapp-mgt</module>
         <module>features/javaee</module>
         <module>features/monitoring</module>
+	<module>features/netty</module>
+        <module>features/protobuf-services</module>
     </modules>
 
     <dependencyManagement>
@@ -841,6 +844,83 @@
                 <artifactId>org.eclipse.osgi</artifactId>
                 <version>${eclipse.osgi.version}</version>
             </dependency>
+
+	    <!--protobuf features-->
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.protobuf.service.server.feature</artifactId>
+                <version>${protobuf.service.version}</version>
+                <type>zip</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.netty.server.feature</artifactId>
+                <version>${netty.version}</version>
+                <type>zip</type>
+            </dependency>
+
+
+            <!--protobuf services dependencies-->
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.protobuf.annotation</artifactId>
+                <version>${protobuf.service.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.protobuf.listener</artifactId>
+                <version>${protobuf.service.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${google.protobuf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.protobuf.registry</artifactId>
+                <version>${protobuf.service.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.protobuf-rpc-pro</groupId>
+                <artifactId>protobuf-rpc-pro-duplex</artifactId>
+                <version>${protobuf-rpc-pro-duplex.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-common</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-buffer</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-api.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!--end of protobuf services dependencies-->
+
         </dependencies>
     </dependencyManagement>
 
@@ -1174,6 +1254,13 @@
         <version.json.wso2>2.0.0.wso2v1</version.json.wso2>
 
         <javax.ws.rs-api.version>2.0-m10</javax.ws.rs-api.version>
+
+        <!--protobuf service-->
+        <protobuf.service.version>1.0.0-SNAPSHOT</protobuf.service.version>
+        <google.protobuf.version>2.5.0</google.protobuf.version>
+        <protobuf-rpc-pro-duplex.version>3.2.3</protobuf-rpc-pro-duplex.version>
+        <netty.version>4.0.15.Final</netty.version>
+        <slf4j-api.version>1.7.2</slf4j-api.version>
 
     </properties>
     
