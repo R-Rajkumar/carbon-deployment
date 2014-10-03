@@ -14,7 +14,6 @@
 
     <xs:complexType name="serverConfiguration">
         <xs:sequence>
-            <xs:element name="Host" type="xs:string"/>
             <xs:element name="Port" type="xs:int"/>
             <xs:element name="EnableSSL" type="xs:boolean"/>
             <xs:element name="ServerCallExecutorThreadPool" type="tns:serverCallExecutorThreadPoolConfiguration"/>

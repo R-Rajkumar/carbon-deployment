@@ -25,9 +25,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerConfiguration {
-	
-    @XmlElement(name = "Host", required = true)
-    private String host;
 
     @XmlElement(name = "Port", required = true)
     private int port;
@@ -47,13 +44,6 @@ public class ServerConfiguration {
     @XmlElement(name = "Logger", required = true)
     private LoggerConfiguration loggerConfiguration;
 
-	public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
 
 	public int getPort() {
 		return port;
