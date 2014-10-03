@@ -132,6 +132,9 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 			} catch (IllegalAccessException e) {
 				String msg = "IllegalAccessException" + e.getLocalizedMessage();
 				log.info(msg, e);
+			} catch (Exception e) {
+				String msg = "Exception" + e.getLocalizedMessage();
+				log.info(msg, e);
 			}
 		}
 	}
