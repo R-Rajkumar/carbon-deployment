@@ -46,7 +46,6 @@
                         <Bundle-Vendor>WSO2 Inc</Bundle-Vendor>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Bundle-Activator>org.wso2.carbon.protobuf.listener.internal.ProtobufListenerActivator</Bundle-Activator>
 						<Private-Package>org.wso2.carbon.protobuf.listener.internal</Private-Package>
                         <Export-Package>
                         	!org.wso2.carbon.protobuf.listener.internal,
