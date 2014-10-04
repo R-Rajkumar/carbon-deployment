@@ -1,20 +1,19 @@
 /*
- *  Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
- *
+ * Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.carbon.protobuf.listener;
@@ -45,9 +44,9 @@ import java.util.List;
 import java.util.Set;
 
 /*
- * This class registers PB services into Binary Services Registry.
- * It will listen for an annotation (@ProtoBufService) and register services when
- * corresponding wars are deployed.
+ * This class registers Protobuf services into Protobuf Services Registry.
+ * It will listen for an annotation @Protobuf and register services
+ * when corresponding wars are deployed.
  */
 @HandlesTypes({ ProtobufService.class })
 public class ProtobufServletContainerInitializer implements ServletContainerInitializer {
@@ -56,7 +55,7 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 
 	@Override
 	public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
-			throws ServletException {
+	                                                                           throws ServletException {
 
 		if (classes == null || classes.size() == 0) {
 			return;
@@ -67,13 +66,21 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 		// Please note that, a PB war can contain many PB services
 		List<ProtobufServiceData> serviceList = new ArrayList<ProtobufServiceData>();
 		// servlet to display proto files (like WSDL files)
-		ServletRegistration.Dynamic dynamic = servletContext.addServlet("ProtoBufServlet",
-				ProtobufServlet.class);
+		ServletRegistration.Dynamic dynamic =
+		                                      servletContext.addServlet("ProtoBufServlet",
+		                                                                ProtobufServlet.class);
 
 		for (Class<?> clazz : classes) {
 			// Getting binary service registry
-			ProtobufRegistry binaryServiceRegistry = (ProtobufRegistry) PrivilegedCarbonContext
-					.getThreadLocalCarbonContext().getOSGiService(ProtobufRegistry.class);
+			PrivilegedCarbonContext threadLocalCarbonContext =
+			                                                   PrivilegedCarbonContext.getThreadLocalCarbonContext();
+			Object osGiService = threadLocalCarbonContext.getOSGiService(ProtobufRegistry.class);
+			if(null == osGiService) {
+				String msg = "Protobuf Registry not found";
+				log.error(msg);
+				return;
+			}
+			ProtobufRegistry protobufRegistry = (ProtobufRegistry) osGiService;
 			// Is it a blocking service or not
 			boolean blocking = clazz.getAnnotation(ProtobufService.class).blocking();
 			Method reflectiveMethod = null;
@@ -84,13 +91,15 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 				if (blocking) {
 					// getting newReflectiveBlocking method which will return a
 					// blocking service
-					reflectiveMethod = clazz.getInterfaces()[0].getDeclaringClass().getMethod(
-							"newReflectiveBlockingService", clazz.getInterfaces()[0]);
+					reflectiveMethod =
+					                   clazz.getInterfaces()[0].getDeclaringClass()
+					                                           .getMethod("newReflectiveBlockingService",
+					                                                      clazz.getInterfaces()[0]);
 					// Since it is a static method, we pass null
 					serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
 					BlockingService blockingService = (BlockingService) serviceObj;
 					// register service into Binary Service Registry
-					binaryServiceRegistry.registerBlockingService(blockingService);
+					protobufRegistry.registerBlockingService(blockingService);
 					serviceName = blockingService.getDescriptorForType().getFullName();
 					serviceType = ServiceType.Blocking;
 					// keeps PB service information in a bean
@@ -103,13 +112,15 @@ public class ProtobufServletContainerInitializer implements ServletContainerInit
 				} else {
 					// getting newReflectiveService which will return a non
 					// blocking service
-					reflectiveMethod = clazz.getInterfaces()[0].getDeclaringClass().getMethod(
-							"newReflectiveService", clazz.getInterfaces()[0]);
+					reflectiveMethod =
+					                   clazz.getInterfaces()[0].getDeclaringClass()
+					                                           .getMethod("newReflectiveService",
+					                                                      clazz.getInterfaces()[0]);
 					// Since it is a static method, we pass null
 					serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
 					Service nonBlockingService = (Service) serviceObj;
 					// register service into Binary Service Registry
-					binaryServiceRegistry.registerService(nonBlockingService);
+					protobufRegistry.registerService(nonBlockingService);
 					serviceName = nonBlockingService.getDescriptorForType().getFullName();
 					serviceType = ServiceType.NonBlocking;
 					// keeps PB service information in a bean
