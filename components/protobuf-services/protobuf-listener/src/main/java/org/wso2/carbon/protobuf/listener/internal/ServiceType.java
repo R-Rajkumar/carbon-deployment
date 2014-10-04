@@ -22,5 +22,5 @@ package org.wso2.carbon.protobuf.listener.internal;
  * Type of protobuf service. 
  */
 public enum ServiceType {
-	Blocking, NonBlocking;
+    Blocking, NonBlocking;
 }

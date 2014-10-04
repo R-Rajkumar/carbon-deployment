@@ -28,45 +28,45 @@ public class ServerCallExecutorThreadPoolConfiguration {
 
     @XmlElement(name = "CorePoolSize", required = true)
     private int corePoolSize;
-    
+
     @XmlElement(name = "MaxPoolSize", required = true)
     private int maxPoolSize;
-    
+
     @XmlElement(name = "MaxPoolTimeout", required = true)
     private int maxPoolTimeout;
-    
+
     @XmlElement(name = "WorkQueueCapacity", required = true)
     private int workQueueCapacity;
 
-	public int getCorePoolSize() {
-		return corePoolSize;
-	}
+    public int getCorePoolSize() {
+        return corePoolSize;
+    }
 
-	public void setCorePoolSize(int corePoolSize) {
-		this.corePoolSize = corePoolSize;
-	}
+    public void setCorePoolSize(int corePoolSize) {
+        this.corePoolSize = corePoolSize;
+    }
 
-	public int getMaxPoolSize() {
-		return maxPoolSize;
-	}
+    public int getMaxPoolSize() {
+        return maxPoolSize;
+    }
 
-	public void setMaxPoolSize(int maxPoolSize) {
-		this.maxPoolSize = maxPoolSize;
-	}
+    public void setMaxPoolSize(int maxPoolSize) {
+        this.maxPoolSize = maxPoolSize;
+    }
 
-	public int getMaxPoolTimeout() {
-		return maxPoolTimeout;
-	}
+    public int getMaxPoolTimeout() {
+        return maxPoolTimeout;
+    }
 
-	public void setMaxPoolTimeout(int maxPoolTimeout) {
-		this.maxPoolTimeout = maxPoolTimeout;
-	}
+    public void setMaxPoolTimeout(int maxPoolTimeout) {
+        this.maxPoolTimeout = maxPoolTimeout;
+    }
 
-	public int getWorkQueueCapacity() {
-		return workQueueCapacity;
-	}
+    public int getWorkQueueCapacity() {
+        return workQueueCapacity;
+    }
 
-	public void setWorkQueueCapacity(int workQueueCapacity) {
-		this.workQueueCapacity = workQueueCapacity;
-	}
+    public void setWorkQueueCapacity(int workQueueCapacity) {
+        this.workQueueCapacity = workQueueCapacity;
+    }
 }

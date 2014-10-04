@@ -48,105 +48,104 @@ import java.util.Set;
  * It will listen for an annotation @Protobuf and register services
  * when corresponding wars are deployed.
  */
-@HandlesTypes({ ProtobufService.class })
+@HandlesTypes({ProtobufService.class})
 public class ProtobufServletContainerInitializer implements ServletContainerInitializer {
 
-	private static final Log log = LogFactory.getLog(ProtobufServletContainerInitializer.class);
+    private static final Log log = LogFactory.getLog(ProtobufServletContainerInitializer.class);
 
-	@Override
-	public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
-	                                                                           throws ServletException {
+    @Override
+    public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
+            throws ServletException {
 
-		if (classes == null || classes.size() == 0) {
-			return;
-		}
-		// adding a listener to remove services when wars are undeployed
-		servletContext.addListener(new ProtobufServletContextListener());
-		// keeps track of PB services in a PB war
-		// Please note that, a PB war can contain many PB services
-		List<ProtobufServiceData> serviceList = new ArrayList<ProtobufServiceData>();
-		// servlet to display proto files (like WSDL files)
-		ServletRegistration.Dynamic dynamic =
-		                                      servletContext.addServlet("ProtoBufServlet",
-		                                                                ProtobufServlet.class);
+        if (classes == null || classes.size() == 0) {
+            return;
+        }
+        // adding a listener to remove services when wars are undeployed
+        servletContext.addListener(new ProtobufServletContextListener());
+        // keeps track of PB services in a PB war
+        // Please note that, a PB war can contain many PB services
+        List<ProtobufServiceData> serviceList = new ArrayList<ProtobufServiceData>();
+        // servlet to display proto files (like WSDL files)
+        ServletRegistration.Dynamic dynamic =
+                servletContext.addServlet("ProtoBufServlet", ProtobufServlet.class);
 
-		for (Class<?> clazz : classes) {
-			// Getting binary service registry
-			PrivilegedCarbonContext threadLocalCarbonContext =
-			                                                   PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			Object osGiService = threadLocalCarbonContext.getOSGiService(ProtobufRegistry.class);
-			if(null == osGiService) {
-				String msg = "Protobuf Registry not found";
-				log.error(msg);
-				return;
-			}
-			ProtobufRegistry protobufRegistry = (ProtobufRegistry) osGiService;
-			// Is it a blocking service or not
-			boolean blocking = clazz.getAnnotation(ProtobufService.class).blocking();
-			Method reflectiveMethod = null;
-			Object serviceObj = null;
-			String serviceName;
-			ServiceType serviceType;
-			try {
-				if (blocking) {
-					// getting newReflectiveBlocking method which will return a
-					// blocking service
-					reflectiveMethod =
-					                   clazz.getInterfaces()[0].getDeclaringClass()
-					                                           .getMethod("newReflectiveBlockingService",
-					                                                      clazz.getInterfaces()[0]);
-					// Since it is a static method, we pass null
-					serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
-					BlockingService blockingService = (BlockingService) serviceObj;
-					// register service into Binary Service Registry
-					protobufRegistry.registerBlockingService(blockingService);
-					serviceName = blockingService.getDescriptorForType().getFullName();
-					serviceType = ServiceType.Blocking;
-					// keeps PB service information in a bean
-					// we need these when removing the services from Binary
-					// Service Registry
-					// we are using these beans instances inside our destroyer
-					serviceList.add(new ProtobufServiceData(serviceName, serviceType));
-					servletContext.setAttribute("services", serviceList);
-					dynamic.addMapping("/");
-				} else {
-					// getting newReflectiveService which will return a non
-					// blocking service
-					reflectiveMethod =
-					                   clazz.getInterfaces()[0].getDeclaringClass()
-					                                           .getMethod("newReflectiveService",
-					                                                      clazz.getInterfaces()[0]);
-					// Since it is a static method, we pass null
-					serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
-					Service nonBlockingService = (Service) serviceObj;
-					// register service into Binary Service Registry
-					protobufRegistry.registerService(nonBlockingService);
-					serviceName = nonBlockingService.getDescriptorForType().getFullName();
-					serviceType = ServiceType.NonBlocking;
-					// keeps PB service information in a bean
-					// we need these information to remove the service from
-					// Binary Service Registry later
-					// we are using these bean instances in our destroyer
-					serviceList.add(new ProtobufServiceData(serviceName, serviceType));
-					servletContext.setAttribute("services", serviceList);
-					dynamic.addMapping("/");
-				}
-			} catch (InvocationTargetException e) {
-				String msg = "InvocationTargetException" + e.getLocalizedMessage();
-				log.info(msg, e);
-			} catch (NoSuchMethodException e) {
-				String msg = "NoSuchMethodException" + e.getLocalizedMessage();
-				log.info(msg, e);
-			} catch (InstantiationException e) {
-				String msg = "InstantiationException" + e.getLocalizedMessage();
-				log.info(msg, e);
-			} catch (IllegalAccessException e) {
-				String msg = "IllegalAccessException" + e.getLocalizedMessage();
-				log.info(msg, e);
-			} catch (Exception e) {
-				String msg = "Exception" + e.getLocalizedMessage();
-				log.info(msg, e);
-			}
-		}
-	}
+        for (Class<?> clazz : classes) {
+            // Getting binary service registry
+            PrivilegedCarbonContext threadLocalCarbonContext =
+                    PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            Object osGiService = threadLocalCarbonContext.getOSGiService(ProtobufRegistry.class);
+            if (null == osGiService) {
+                String msg = "Protobuf Registry not found";
+                log.error(msg);
+                return;
+            }
+            ProtobufRegistry protobufRegistry = (ProtobufRegistry) osGiService;
+            // Is it a blocking service or not
+            boolean blocking = clazz.getAnnotation(ProtobufService.class).blocking();
+            Method reflectiveMethod = null;
+            Object serviceObj = null;
+            String serviceName;
+            ServiceType serviceType;
+            try {
+                if (blocking) {
+                    // getting newReflectiveBlocking method which will return a
+                    // blocking service
+                    reflectiveMethod =
+                            clazz.getInterfaces()[0].getDeclaringClass()
+                                    .getMethod("newReflectiveBlockingService",
+                                               clazz.getInterfaces()[0]);
+                    // Since it is a static method, we pass null
+                    serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
+                    BlockingService blockingService = (BlockingService) serviceObj;
+                    // register service into Binary Service Registry
+                    protobufRegistry.registerBlockingService(blockingService);
+                    serviceName = blockingService.getDescriptorForType().getFullName();
+                    serviceType = ServiceType.Blocking;
+                    // keeps PB service information in a bean
+                    // we need these when removing the services from Binary
+                    // Service Registry
+                    // we are using these beans instances inside our destroyer
+                    serviceList.add(new ProtobufServiceData(serviceName, serviceType));
+                    servletContext.setAttribute("services", serviceList);
+                    dynamic.addMapping("/");
+                } else {
+                    // getting newReflectiveService which will return a non
+                    // blocking service
+                    reflectiveMethod =
+                            clazz.getInterfaces()[0].getDeclaringClass()
+                                    .getMethod("newReflectiveService",
+                                               clazz.getInterfaces()[0]);
+                    // Since it is a static method, we pass null
+                    serviceObj = reflectiveMethod.invoke(null, clazz.newInstance());
+                    Service nonBlockingService = (Service) serviceObj;
+                    // register service into Binary Service Registry
+                    protobufRegistry.registerService(nonBlockingService);
+                    serviceName = nonBlockingService.getDescriptorForType().getFullName();
+                    serviceType = ServiceType.NonBlocking;
+                    // keeps PB service information in a bean
+                    // we need these information to remove the service from
+                    // Binary Service Registry later
+                    // we are using these bean instances in our destroyer
+                    serviceList.add(new ProtobufServiceData(serviceName, serviceType));
+                    servletContext.setAttribute("services", serviceList);
+                    dynamic.addMapping("/");
+                }
+            } catch (InvocationTargetException e) {
+                String msg = "InvocationTargetException" + e.getLocalizedMessage();
+                log.info(msg, e);
+            } catch (NoSuchMethodException e) {
+                String msg = "NoSuchMethodException" + e.getLocalizedMessage();
+                log.info(msg, e);
+            } catch (InstantiationException e) {
+                String msg = "InstantiationException" + e.getLocalizedMessage();
+                log.info(msg, e);
+            } catch (IllegalAccessException e) {
+                String msg = "IllegalAccessException" + e.getLocalizedMessage();
+                log.info(msg, e);
+            } catch (Exception e) {
+                String msg = "Exception" + e.getLocalizedMessage();
+                log.info(msg, e);
+            }
+        }
+    }
 }

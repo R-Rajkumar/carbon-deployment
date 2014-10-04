@@ -28,36 +28,36 @@ public class TransportConfiguration {
 
     @XmlElement(name = "Acceptors", required = true)
     private AcceptorsConfiguration acceptorsConfiguration;
-    
+
     @XmlElement(name = "ChannelHandlers", required = true)
     private ChannelHandlersConfiguration channelHandlersConfiguration;
-    
+
     @XmlElement(name = "TCPNoDelay", required = true, type = Boolean.class)
     private boolean isTCPNoDelay;
 
-	public AcceptorsConfiguration getAcceptorsConfiguration() {
-		return acceptorsConfiguration;
-	}
+    public AcceptorsConfiguration getAcceptorsConfiguration() {
+        return acceptorsConfiguration;
+    }
 
-	public void setAcceptorsConfiguration(
-			AcceptorsConfiguration acceptorsConfiguration) {
-		this.acceptorsConfiguration = acceptorsConfiguration;
-	}
+    public void setAcceptorsConfiguration(
+            AcceptorsConfiguration acceptorsConfiguration) {
+        this.acceptorsConfiguration = acceptorsConfiguration;
+    }
 
-	public ChannelHandlersConfiguration getChannelHandlersConfiguration() {
-		return channelHandlersConfiguration;
-	}
+    public ChannelHandlersConfiguration getChannelHandlersConfiguration() {
+        return channelHandlersConfiguration;
+    }
 
-	public void setChannelHandlersConfiguration(
-			ChannelHandlersConfiguration channelHandlersConfiguration) {
-		this.channelHandlersConfiguration = channelHandlersConfiguration;
-	}
+    public void setChannelHandlersConfiguration(
+            ChannelHandlersConfiguration channelHandlersConfiguration) {
+        this.channelHandlersConfiguration = channelHandlersConfiguration;
+    }
 
-	public boolean isTCPNoDelay() {
-		return isTCPNoDelay;
-	}
+    public boolean isTCPNoDelay() {
+        return isTCPNoDelay;
+    }
 
-	public void setTCPNoDelay(boolean isTCPNoDelay) {
-		this.isTCPNoDelay = isTCPNoDelay;
-	}
+    public void setTCPNoDelay(boolean isTCPNoDelay) {
+        this.isTCPNoDelay = isTCPNoDelay;
+    }
 }

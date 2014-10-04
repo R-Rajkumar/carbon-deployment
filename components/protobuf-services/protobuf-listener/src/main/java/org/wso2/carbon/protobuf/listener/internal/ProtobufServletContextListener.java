@@ -35,34 +35,34 @@ import java.util.List;
  * when protobuf service wars are undeployed.
  */
 public class ProtobufServletContextListener implements ServletContextListener {
-	@Override
-	public void contextInitialized(ServletContextEvent servletContextEvent) {
-	}
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+    }
 
-	@Override
-	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
-		ServletContext servletContext = servletContextEvent.getServletContext();
-		// getting Binary Service Registry from OSGI run time
-		ProtobufRegistry protobufRegistry = (ProtobufRegistry) PrivilegedCarbonContext
-				.getThreadLocalCarbonContext().getOSGiService(ProtobufRegistry.class);
-		// getting all the services for the corresponding servlet context
-		// Please note that, a PB war can contain many PB services
-		// Therefore we should remove all of them when the war is undeployed
-		List<ProtobufServiceData> serviceList = ((ArrayList<ProtobufServiceData>) servletContext
-				.getAttribute("services"));
+        ServletContext servletContext = servletContextEvent.getServletContext();
+        // getting Binary Service Registry from OSGI run time
+        ProtobufRegistry protobufRegistry = (ProtobufRegistry) PrivilegedCarbonContext
+                .getThreadLocalCarbonContext().getOSGiService(ProtobufRegistry.class);
+        // getting all the services for the corresponding servlet context
+        // Please note that, a PB war can contain many PB services
+        // Therefore we should remove all of them when the war is undeployed
+        List<ProtobufServiceData> serviceList = ((ArrayList<ProtobufServiceData>) servletContext
+                .getAttribute("services"));
 
-		for (Iterator<ProtobufServiceData> iterator = serviceList.iterator(); iterator.hasNext();) {
-			// getting service information from PBService bean
-			ProtobufServiceData pbService = iterator.next();
-			String serviceName = pbService.getServiceName();
-			ServiceType serviceType = pbService.getServiceType();
-			// if PB service is a blocking service
-			if (serviceType == ServiceType.Blocking) {
-				protobufRegistry.removeBlockingService(serviceName);
-			} else if (serviceType == ServiceType.NonBlocking) {
-				protobufRegistry.removeService(serviceName);
-			}
-		}
-	}
+        for (Iterator<ProtobufServiceData> iterator = serviceList.iterator(); iterator.hasNext(); ) {
+            // getting service information from PBService bean
+            ProtobufServiceData pbService = iterator.next();
+            String serviceName = pbService.getServiceName();
+            ServiceType serviceType = pbService.getServiceType();
+            // if PB service is a blocking service
+            if (serviceType == ServiceType.Blocking) {
+                protobufRegistry.removeBlockingService(serviceName);
+            } else if (serviceType == ServiceType.NonBlocking) {
+                protobufRegistry.removeService(serviceName);
+            }
+        }
+    }
 }

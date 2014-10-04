@@ -26,32 +26,32 @@ import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
 
 public class ProtobufRegistryImpl implements ProtobufRegistry {
-	
-	private RpcServiceRegistry rpcServiceRegistry;
 
-	ProtobufRegistryImpl(RpcServiceRegistry rpcServiceRegistry) {
-		this.rpcServiceRegistry = rpcServiceRegistry;
-	}
+    private RpcServiceRegistry rpcServiceRegistry;
 
-	@Override
-	public void registerBlockingService(BlockingService blockingService) {
-		rpcServiceRegistry.registerService(blockingService);
-	}
+    ProtobufRegistryImpl(RpcServiceRegistry rpcServiceRegistry) {
+        this.rpcServiceRegistry = rpcServiceRegistry;
+    }
 
-	@Override
-	public void registerService(Service service) {
-		rpcServiceRegistry.registerService(service);
-	}
+    @Override
+    public void registerBlockingService(BlockingService blockingService) {
+        rpcServiceRegistry.registerService(blockingService);
+    }
 
-	@Override
-	public void removeBlockingService(String serviceName) {
-		BlockingService blockingService = rpcServiceRegistry.resolveService(serviceName).getBlockingService();
-		rpcServiceRegistry.removeService(blockingService);
-	}
+    @Override
+    public void registerService(Service service) {
+        rpcServiceRegistry.registerService(service);
+    }
 
-	@Override
-	public void removeService(String serviceName) {
-		Service service = rpcServiceRegistry.resolveService(serviceName).getService();
-		rpcServiceRegistry.removeService(service);
-	}
+    @Override
+    public void removeBlockingService(String serviceName) {
+        BlockingService blockingService = rpcServiceRegistry.resolveService(serviceName).getBlockingService();
+        rpcServiceRegistry.removeService(blockingService);
+    }
+
+    @Override
+    public void removeService(String serviceName) {
+        Service service = rpcServiceRegistry.resolveService(serviceName).getService();
+        rpcServiceRegistry.removeService(service);
+    }
 }

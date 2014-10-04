@@ -28,71 +28,71 @@ public class ServerConfiguration {
 
     @XmlElement(name = "Port", required = true)
     private int port;
-    
+
     @XmlElement(name = "EnableSSL", required = true, type = Boolean.class)
     private boolean isSSLEnabled;
-    
+
     @XmlElement(name = "ServerCallExecutorThreadPool", required = true)
     private ServerCallExecutorThreadPoolConfiguration serverCallExecutorThreadPoolConfiguration;
-    
+
     @XmlElement(name = "TimeoutExecutorThreadPool", required = true)
     private TimeoutExecutorThreadPoolConfiguration timeoutExecutorThreadPoolConfiguration;
-    
+
     @XmlElement(name = "TimeoutCheckerThreadPool", required = true)
     private TimeoutCheckerThreadPoolConfiguration timeoutCheckerThreadPoolConfiguration;
-    
+
     @XmlElement(name = "Logger", required = true)
     private LoggerConfiguration loggerConfiguration;
 
 
-	public int getPort() {
-		return port;
-	}
+    public int getPort() {
+        return port;
+    }
 
-	public void setPort(int port) {
-		this.port = port;
-	}
+    public void setPort(int port) {
+        this.port = port;
+    }
 
-	public boolean isSSLEnabled() {
-		return isSSLEnabled;
-	}
+    public boolean isSSLEnabled() {
+        return isSSLEnabled;
+    }
 
-	public void setSSLEnabled(boolean isSSLEnabled) {
-		this.isSSLEnabled = isSSLEnabled;
-	}
+    public void setSSLEnabled(boolean isSSLEnabled) {
+        this.isSSLEnabled = isSSLEnabled;
+    }
 
-	public ServerCallExecutorThreadPoolConfiguration getServerCallExecutorThreadPoolConfiguration() {
-		return serverCallExecutorThreadPoolConfiguration;
-	}
+    public ServerCallExecutorThreadPoolConfiguration getServerCallExecutorThreadPoolConfiguration() {
+        return serverCallExecutorThreadPoolConfiguration;
+    }
 
-	public void setServerCallExecutorThreadPoolConfiguration(
-			ServerCallExecutorThreadPoolConfiguration serverCallExecutorThreadPoolConfiguration) {
-		this.serverCallExecutorThreadPoolConfiguration = serverCallExecutorThreadPoolConfiguration;
-	}
+    public void setServerCallExecutorThreadPoolConfiguration(
+            ServerCallExecutorThreadPoolConfiguration serverCallExecutorThreadPoolConfiguration) {
+        this.serverCallExecutorThreadPoolConfiguration = serverCallExecutorThreadPoolConfiguration;
+    }
 
-	public TimeoutExecutorThreadPoolConfiguration getTimeoutExecutorThreadPoolConfiguration() {
-		return timeoutExecutorThreadPoolConfiguration;
-	}
+    public TimeoutExecutorThreadPoolConfiguration getTimeoutExecutorThreadPoolConfiguration() {
+        return timeoutExecutorThreadPoolConfiguration;
+    }
 
-	public void setTimeoutExecutorThreadPoolConfiguration(
-			TimeoutExecutorThreadPoolConfiguration timeoutExecutorThreadPoolConfiguration) {
-		this.timeoutExecutorThreadPoolConfiguration = timeoutExecutorThreadPoolConfiguration;
-	}
+    public void setTimeoutExecutorThreadPoolConfiguration(
+            TimeoutExecutorThreadPoolConfiguration timeoutExecutorThreadPoolConfiguration) {
+        this.timeoutExecutorThreadPoolConfiguration = timeoutExecutorThreadPoolConfiguration;
+    }
 
-	public TimeoutCheckerThreadPoolConfiguration getTimeoutCheckerThreadPoolConfiguration() {
-		return timeoutCheckerThreadPoolConfiguration;
-	}
+    public TimeoutCheckerThreadPoolConfiguration getTimeoutCheckerThreadPoolConfiguration() {
+        return timeoutCheckerThreadPoolConfiguration;
+    }
 
-	public void setTimeoutCheckerThreadPoolConfiguration(
-			TimeoutCheckerThreadPoolConfiguration timeoutCheckerThreadPoolConfiguration) {
-		this.timeoutCheckerThreadPoolConfiguration = timeoutCheckerThreadPoolConfiguration;
-	}
+    public void setTimeoutCheckerThreadPoolConfiguration(
+            TimeoutCheckerThreadPoolConfiguration timeoutCheckerThreadPoolConfiguration) {
+        this.timeoutCheckerThreadPoolConfiguration = timeoutCheckerThreadPoolConfiguration;
+    }
 
-	public LoggerConfiguration getLoggerConfiguration() {
-		return loggerConfiguration;
-	}
+    public LoggerConfiguration getLoggerConfiguration() {
+        return loggerConfiguration;
+    }
 
-	public void setLoggerConfiguration(LoggerConfiguration loggerConfiguration) {
-		this.loggerConfiguration = loggerConfiguration;
-	}
+    public void setLoggerConfiguration(LoggerConfiguration loggerConfiguration) {
+        this.loggerConfiguration = loggerConfiguration;
+    }
 }

@@ -28,19 +28,19 @@ package org.wso2.carbon.protobuf.listener.internal;
  * serviceType - whether it is a blocking service or non blocking service
  */
 public class ProtobufServiceData {
-	private String serviceName;
-	private ServiceType serviceType;
+    private String serviceName;
+    private ServiceType serviceType;
 
-	public ProtobufServiceData(String serviceName, ServiceType serviceType) {
-		this.serviceName = serviceName;
-		this.serviceType = serviceType;
-	}
+    public ProtobufServiceData(String serviceName, ServiceType serviceType) {
+        this.serviceName = serviceName;
+        this.serviceType = serviceType;
+    }
 
-	protected String getServiceName() {
-		return serviceName;
-	}
+    protected String getServiceName() {
+        return serviceName;
+    }
 
-	protected ServiceType getServiceType() {
-		return serviceType;
-	}
+    protected ServiceType getServiceType() {
+        return serviceType;
+    }
 }

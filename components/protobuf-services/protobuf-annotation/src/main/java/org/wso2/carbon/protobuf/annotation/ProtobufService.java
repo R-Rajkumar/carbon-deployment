@@ -33,6 +33,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ProtobufService {
-	// blocking or non-blocking
-	public boolean blocking() default true;
+    // blocking or non-blocking
+    public boolean blocking() default true;
 }

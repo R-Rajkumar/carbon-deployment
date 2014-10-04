@@ -30,28 +30,24 @@ import com.google.protobuf.Service;
  */
 public interface ProtobufRegistry {
 
-	/**
-	 * @param blockingService
-	 *            - an instance of a class which implements
-	 *            {@link BlockingService}
-	 */
-	public void registerBlockingService(BlockingService blockingService);
+    /**
+     * @param blockingService - an instance of a class which implements
+     *                        {@link BlockingService}
+     */
+    public void registerBlockingService(BlockingService blockingService);
 
-	/**
-	 * @param service
-	 *            - an instance of a class which implements {@link Service}
-	 */
-	public void registerService(Service service);
+    /**
+     * @param service - an instance of a class which implements {@link Service}
+     */
+    public void registerService(Service service);
 
-	/**
-	 * @param serviceName
-	 *            - service name of the service to be removed
-	 */
-	public void removeBlockingService(String serviceName);
+    /**
+     * @param serviceName - service name of the service to be removed
+     */
+    public void removeBlockingService(String serviceName);
 
-	/**
-	 * @param serviceName
-	 *            - service name of the service to be removed
-	 */
-	public void removeService(String serviceName);
+    /**
+     * @param serviceName - service name of the service to be removed
+     */
+    public void removeService(String serviceName);
 }
